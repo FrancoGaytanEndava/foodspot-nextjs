@@ -1,0 +1,18 @@
+@import './custom-properties';
+
+// Global styles
+@import './global';
+
+@font-face {
+  font-family: 'Della Respira';
+  src: url('/fonts/DellaRespira-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Raleway';
+  src: url('/fonts/Raleway-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
