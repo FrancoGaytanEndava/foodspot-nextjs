@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useLocalizationContext, useTranslation } from '@contexts/LocalizationContext';
-import AlertPopup from '@components/micro/AlertPopup/AlertPopup';
+import AlertPopup from '@components/micro/AlertPopup';
 import { useAuth } from '@contexts/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
 import styles from './styles.module.scss';

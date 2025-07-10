@@ -3,13 +3,13 @@
 import { useRouter } from 'next/navigation';
 import { useTranslation } from '@contexts/LocalizationContext';
 import { useAuth } from '@contexts/AuthContext';
-import Button from '@components/micro/Button/Button';
-import FormLayout from '@components/macro/layout/FormLayout/FormLayout';
+import Button from '@components/micro/Button';
+import FormLayout from '@components/macro/layout/FormLayout';
 import { useEffect, useRef, useState } from 'react';
 import { LoginRequest } from '@models/user';
 import styles from './styles.module.scss';
 import { getBrowserName } from '@utils/utilities';
-import Spinner from '@components/micro/Spinner/Spinner';
+import Spinner from '@components/micro/Spinner';
 import Link from 'next/link';
 
 export default function LoginForm() {

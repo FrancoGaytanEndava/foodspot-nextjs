@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState } from 'react';
-import { AlertTypes } from '@components/micro/AlertPopup/AlertPopup';
+import { AlertTypes } from '@components/micro/AlertPopup';
 
 const ALERT_TIME = 3000;
 

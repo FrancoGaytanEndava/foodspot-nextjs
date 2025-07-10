@@ -5,7 +5,7 @@ import { localStorageKeys } from '.././utils/localStorageKeys';
 import { LoginResponse } from '../models/user';
 import { _login } from '../services';
 import { useAlert } from './AlertContext';
-import { AlertTypes } from '../components/micro/AlertPopup/AlertPopup';
+import { AlertTypes } from '../components/micro/AlertPopup';
 import { useTranslation } from './LocalizationContext';
 
 interface IAuthContext {
