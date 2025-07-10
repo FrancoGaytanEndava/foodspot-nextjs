@@ -1,7 +1,9 @@
-@import './custom-properties';
+@use 'tailwindcss';
+@use './custom-properties';
+@use './theme.scss';
 
 // Global styles
-@import './global';
+@use './global';
 
 @font-face {
   font-family: 'Della Respira';
