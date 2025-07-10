@@ -3,10 +3,10 @@ import LoginForm from '@components/pages/LoginForm/LoginForm';
 // import RegisterForm from '@components/pages/RegisterForm';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
     lang: string;
-  };
+  }>;
 }
 
 export default async function Page({ params }: PageProps) {
