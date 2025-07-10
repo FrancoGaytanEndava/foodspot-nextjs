@@ -5,19 +5,19 @@ import { useTranslation } from '@contexts/LocalizationContext';
 import { useAuth } from '@contexts/AuthContext';
 import Button from '@components/micro/Button/Button';
 import FormLayout from '@components/macro/layout/FormLayout/FormLayout';
-import { JSX, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { LoginRequest } from '@models/user';
 import styles from './styles.module.scss';
 import { getBrowserName } from '@utils/utilities';
-import { Translation } from '@localization/index';
 import Spinner from '@components/micro/Spinner/Spinner';
+import Link from 'next/link';
 
-export default function Login(): JSX.Element {
+export default function LoginForm() {
   const router = useRouter();
-  const lang = useTranslation<Translation['login']>('login');
+  const lang = useTranslation('login');
   const { login, isLoading } = useAuth();
-  const [browserName, setBrowserName] = useState<string | null>(null);
 
+  const [browserName, setBrowserName] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(true);
   const inputPassword = useRef<HTMLInputElement | null>(null);
 
@@ -26,21 +26,21 @@ export default function Login(): JSX.Element {
     password: '',
   });
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
+  useEffect(() => {
+    setBrowserName(getBrowserName());
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setLoginCredentials({
       ...loginCredentials,
       [e.target.id]: e.target.value,
     });
-  }
+  };
 
-  async function handleLogin(e: React.MouseEvent): Promise<void> {
+  const handleLogin = async (e: React.MouseEvent): Promise<void> => {
     e.preventDefault();
     await login(loginCredentials.email, loginCredentials.password);
-  }
-
-  useEffect(() => {
-    setBrowserName(getBrowserName());
-  }, []);
+  };
 
   return (
     <FormLayout>
@@ -50,9 +50,10 @@ export default function Login(): JSX.Element {
           router.push('/');
           router.refresh();
         }}
-      ></div>
+        aria-label="Close"
+        role="button"></div>
 
-      <h3 className={styles.title}>{lang.loginTitle}</h3>
+      <h3 className={styles.title}> {lang.loginTitle}</h3>
 
       <label htmlFor="email" className={styles.loginLabel}>
         {lang.email}
@@ -65,6 +66,7 @@ export default function Login(): JSX.Element {
         type="text"
         onChange={handleChange}
         value={loginCredentials.email}
+        aria-label="Email"
       />
 
       <label htmlFor="password" className={styles.loginLabel}>
@@ -80,7 +82,9 @@ export default function Login(): JSX.Element {
           type={browserName === 'Edge' ? 'password' : showPassword ? 'password' : 'text'}
           onChange={handleChange}
           value={loginCredentials.password}
+          aria-label="Password"
         />
+
         {browserName !== 'Edge' && (
           <div
             className={styles.passwordEye}
@@ -93,12 +97,10 @@ export default function Login(): JSX.Element {
                   inputPassword.current.setSelectionRange(length, length);
                 }
               }, 0);
-            }}
-          ></div>
+            }}></div>
         )}
-        {browserName !== 'Edge' && !showPassword && (
-          <div className={styles.passwordEyeCrossedLine}></div>
-        )}
+
+        {browserName !== 'Edge' && !showPassword && <div className={styles.passwordEyeCrossedLine}></div>}
       </section>
 
       {isLoading ? (
@@ -109,14 +111,14 @@ export default function Login(): JSX.Element {
         </Button>
       )}
 
-      <a href="/recoverkey" className={styles.forgotPassword} id="recoverKey">
+      <Link href="/recoverkey" className={styles.forgotPassword}>
         {lang.forgotPassword}
-      </a>
+      </Link>
 
-      <a href="/register" className={styles.register} id="register">
+      <Link href="/register" className={styles.register} id="register">
         <span>{lang.alreadyRegistered} </span>
         <span className={styles.registerHighlighted}>{lang.registerHere}</span>
-      </a>
+      </Link>
     </FormLayout>
   );
 }

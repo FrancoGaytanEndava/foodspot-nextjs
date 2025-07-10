@@ -1,9 +1,11 @@
-import { createContext, Dispatch, useContext, SetStateAction, useState, useEffect } from 'react';
-import { defaultLocale, Translation, Locale, locales } from '../localization';
-import { getObjectByKeys } from '../utils/common';
-import useLocalStorage from '../hooks/useLocalStorage';
-import { localStorageKeys } from '../utils/localStorageKeys';
-import { NestedKeyOf } from '../utils/typeUtilities';
+'use client';
+
+import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState, ReactNode } from 'react';
+import { defaultLocale, locales, Locale, Translation } from '@localization/index';
+import { usePathname } from 'next/navigation';
+import { getObjectByKeys } from '@utils/common';
+import { GetNestedValue, NestedKeyOf } from '@utils/typeUtilities';
+import { getLocaleFromCookie, setLocaleCookie } from '@utils/localeCookies';
 
 interface ILocalizationContext {
   locale: Locale;
@@ -12,50 +14,47 @@ interface ILocalizationContext {
 
 const LocalizationContext = createContext<ILocalizationContext>({} as ILocalizationContext);
 
-export function LocalizationProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}): React.ReactElement {
-  const [storedLocale, storeLocale] = useLocalStorage(localStorageKeys.locale, defaultLocale.id);
+interface LocalizationProviderProps {
+  children: ReactNode;
+  lang?: string;
+}
 
-  const [locale, setLocale] = useState<Locale>(() => {
-    const found = locales.find(x => x.id === storedLocale);
-    return found ?? defaultLocale;
-  });
+export function LocalizationProvider({ children, lang }: LocalizationProviderProps) {
+  const [locale, setLocale] = useState<Locale>(defaultLocale);
+  const pathname = usePathname();
 
   useEffect(() => {
-    if (locale?.id) {
-      storeLocale(locale.id);
-    }
-  }, [locale, storeLocale]);
+    const langId = lang ?? pathname.split('/')[1];
+    const matched = locales.find(l => l.id.toLowerCase() === langId?.toLowerCase());
 
-  return (
-    <LocalizationContext.Provider value={{ locale, setLocale }}>
-      {children}
-    </LocalizationContext.Provider>
-  );
+    if (matched && matched.id !== locale.id) {
+      setLocale(matched);
+      setLocaleCookie(matched.id);
+    } else if (!matched) {
+      const fromCookie = getLocaleFromCookie();
+      const fallback = locales.find(l => l.id === fromCookie);
+      if (fallback) {
+        setLocale(fallback);
+        setLocaleCookie(fallback.id);
+      } else {
+        setLocale(defaultLocale);
+        setLocaleCookie(defaultLocale.id);
+      }
+    }
+  }, [pathname, lang]);
+
+  return <LocalizationContext.Provider value={{ locale, setLocale }}>{children}</LocalizationContext.Provider>;
 }
 
 export function useLocalizationContext(): ILocalizationContext {
   const context = useContext(LocalizationContext);
-
   if (!context) {
     throw new Error('useLocalizationContext must be used within a LocalizationProvider');
   }
-
   return context;
 }
 
-export function useTranslation(): Translation;
-export function useTranslation<T = unknown>(key: NestedKeyOf<Translation>): T;
-export function useTranslation<T = unknown>(key?: NestedKeyOf<Translation>): Translation | T {
-  const context = useLocalizationContext();
-
-  if (!context?.locale?.translation) {
-    return {} as Translation;
-  }
-
-  const { locale } = context;
-  return !key ? locale.translation : getObjectByKeys(locale.translation, key);
+export function useTranslation<K extends NestedKeyOf<Translation>>(key: K): GetNestedValue<Translation, K> {
+  const { locale } = useLocalizationContext();
+  return locale?.translation ? getObjectByKeys(locale.translation, key) : ({} as GetNestedValue<Translation, K>);
 }
