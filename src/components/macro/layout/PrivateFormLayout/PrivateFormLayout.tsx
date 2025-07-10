@@ -60,6 +60,9 @@ export default function PrivateFormLayout({ children }: PrivateFormLayoutProps) 
     if (!selected) return;
 
     setLocale(selected);
+    if (typeof document !== 'undefined') {
+      document.cookie = `locale=${langId}; path=/; max-age=${60 * 60 * 24 * 365}`;
+    }
 
     const newPath = pathname.replace(/^\/[a-zA-Z-]+/, `/${langId}`);
     router.push(newPath);

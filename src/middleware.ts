@@ -2,25 +2,22 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const PUBLIC_FILE = /\.(.*)$/;
 const DEFAULT_LOCALE = 'en-US';
+const SUPPORTED_LOCALES = ['en-US', 'es-AR'];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Si es un archivo público (imagen, .css, etc), no hacemos nada
-  if (pathname.startsWith('/api') || PUBLIC_FILE.test(pathname) || pathname.startsWith('/_next')) {
+  if (pathname.startsWith('/_next') || pathname.startsWith('/api') || PUBLIC_FILE.test(pathname)) {
     return NextResponse.next();
   }
 
   const segments = pathname.split('/');
-  const possibleLang = segments[1];
+  const maybeLang = segments[1];
 
-  // Si la URL ya tiene idioma (ej: /en-US/...), no hacemos nada
-  const supportedLocales = ['en-US', 'es-AR'];
-  if (supportedLocales.includes(possibleLang)) {
+  if (SUPPORTED_LOCALES.includes(maybeLang)) {
     return NextResponse.next();
   }
 
-  // Si no tiene idioma en la URL, redireccionamos a /[DEFAULT_LOCALE]/...
   const url = request.nextUrl.clone();
   url.pathname = `/${DEFAULT_LOCALE}${pathname}`;
   return NextResponse.redirect(url);

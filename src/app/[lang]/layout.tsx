@@ -15,8 +15,10 @@ export const metadata: Metadata = {
 };
 
 export default async function LangLayout({ children, params }: { children: React.ReactNode; params: { lang: string } }) {
-  const lang = (await params).lang;
+  const localParams = await params;
+  const lang = localParams.lang;
 
+  // language validation
   const locale = locales.find(l => l.id.toLowerCase() === lang.toLowerCase());
   if (!locale) return notFound();
 

@@ -5,7 +5,7 @@ import { defaultLocale, locales, Locale, Translation } from '@localization/index
 import { usePathname } from 'next/navigation';
 import { getObjectByKeys } from '@utils/common';
 import { GetNestedValue, NestedKeyOf } from '@utils/typeUtilities';
-import { getLocaleFromCookie, setLocaleCookie } from '@utils/localeCookies';
+import { getLocaleFromCookie } from '@utils/localeCookies';
 
 interface ILocalizationContext {
   locale: Locale;
@@ -29,16 +29,13 @@ export function LocalizationProvider({ children, lang }: LocalizationProviderPro
 
     if (matched && matched.id !== locale.id) {
       setLocale(matched);
-      setLocaleCookie(matched.id);
     } else if (!matched) {
       const fromCookie = getLocaleFromCookie();
       const fallback = locales.find(l => l.id === fromCookie);
       if (fallback) {
         setLocale(fallback);
-        setLocaleCookie(fallback.id);
       } else {
         setLocale(defaultLocale);
-        setLocaleCookie(defaultLocale.id);
       }
     }
   }, [pathname, lang]);
