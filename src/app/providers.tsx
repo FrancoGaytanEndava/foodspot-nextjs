@@ -8,11 +8,16 @@ import { EventProvider } from '@contexts/EventContext';
 import { GlobalProvider } from '@contexts/GlobalContext';
 import { UserProvider } from '@contexts/UserContext';
 
-export function Providers({ children }: { children: ReactNode }) {
+interface ProvidersProps {
+  children: ReactNode;
+  lang?: string;
+}
+
+export function Providers({ children, lang }: ProvidersProps) {
   return (
     <AuthProvider>
       <AlertProvider>
-        <LocalizationProvider>
+        <LocalizationProvider lang={lang}>
           <GlobalProvider>
             <EventProvider>
               <UserProvider>{children}</UserProvider>

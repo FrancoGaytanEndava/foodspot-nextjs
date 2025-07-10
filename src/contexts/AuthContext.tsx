@@ -3,11 +3,10 @@ import { useRouter } from 'next/navigation';
 import { createContext, useContext, useState, SetStateAction, useEffect, JSX } from 'react';
 import { localStorageKeys } from '.././utils/localStorageKeys';
 import { LoginResponse } from '../models/user';
-import { _login } from '../service';
+import { _login } from '../services';
 import { useAlert } from './AlertContext';
 import { AlertTypes } from '../components/micro/AlertPopup/AlertPopup';
 import { useTranslation } from './LocalizationContext';
-import { Translation } from '@localization/index';
 
 interface IAuthContext {
   user: LoginResponse | null;
@@ -30,7 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }): JSX.E
   const [isLoading, setIsLoading] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState<string | null>(null);
   const { setAlert } = useAlert();
-  const lang = useTranslation<Translation['login']>('login');
+  const lang = useTranslation('login');
 
   /**
    * Logs in user
@@ -111,8 +110,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }): JSX.E
         setUser,
         logout,
         login,
-      }}
-    >
+      }}>
       {children}
     </AuthContext.Provider>
   );
