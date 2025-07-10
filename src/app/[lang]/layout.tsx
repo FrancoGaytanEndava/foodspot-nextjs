@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 
 import { Providers } from './providers';
 import '@styles/main.scss';
+import '@styles/globals.css';
 
 // Next incluye fuentes de Google por defecto, pero si queres usar una fuente diferente podes importarla.
 // En este caso, se esta usando la fuente Geist y Geist Mono.
