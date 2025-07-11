@@ -8,19 +8,19 @@ interface EmailInputProps {
   className?: string;
 }
 
-export function EmailInput({ value, onChange, label, placeholder, className }: EmailInputProps) {
+export function EmailInput(props: EmailInputProps) {
   return (
     <>
       <label htmlFor="email" className={styles.loginLabel}>
-        {label}
+        {props.label}
       </label>
       <input
         id="email"
-        className={`${styles.loginInput} ${className ?? ''}`}
-        placeholder={placeholder}
+        className={`${styles.loginInput} ${props.className ?? ''}`}
+        placeholder={props.placeholder}
         type="text"
-        value={value}
-        onChange={e => onChange(e.target.value)}
+        value={props.value}
+        onChange={e => props.onChange(e.target.value)}
         aria-label="Email"
       />
     </>

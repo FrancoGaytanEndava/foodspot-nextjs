@@ -10,7 +10,7 @@ interface PasswordInputProps {
   className?: string;
 }
 
-export function PasswordInput({ value, onChange, label, placeholder, className }: PasswordInputProps) {
+export function PasswordInput(props: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(true);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const browser = getBrowserName();
@@ -18,17 +18,17 @@ export function PasswordInput({ value, onChange, label, placeholder, className }
   return (
     <>
       <label htmlFor="password" className={styles.loginLabel}>
-        {label}
+        {props.label}
       </label>
       <section className={styles.inputPasswordSection}>
         <input
           id="password"
           ref={inputRef}
-          className={`${styles.loginInput} ${className ?? ''}`}
-          placeholder={placeholder}
+          className={`${styles.loginInput} ${props.className ?? ''}`}
+          placeholder={props.placeholder}
           type={browser === 'Edge' ? 'password' : showPassword ? 'password' : 'text'}
-          value={value}
-          onChange={e => onChange(e.target.value)}
+          value={props.value}
+          onChange={e => props.onChange(e.target.value)}
           aria-label="Password"
         />
         {browser !== 'Edge' && (

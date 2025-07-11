@@ -1,6 +1,7 @@
 'use client';
 
-import Link, { LinkProps } from 'next/link';
+import Link from 'next/link';
+import type { LinkProps } from 'next/link';
 import { useLocalizationContext } from '@contexts/LocalizationContext';
 import { PropsWithChildren } from 'react';
 
@@ -9,15 +10,24 @@ interface LinkCustomProps extends LinkProps {
   id?: string;
 }
 
-export default function LinkCustom({ href, className, children, ...rest }: PropsWithChildren<LinkCustomProps>) {
+export default function LinkCustom(props: PropsWithChildren<LinkCustomProps>) {
   const { locale } = useLocalizationContext();
 
   const langPrefix = `/${locale.id}`;
-  const resolvedHref = `${langPrefix}${typeof href === 'string' ? href : href.pathname}`.replace(/\/{2,}/g, '/');
+  const hrefValue = typeof props.href === 'string' ? props.href : props.href.pathname || '';
+  const resolvedHref = `${langPrefix}${hrefValue}`.replace(/\/{2,}/g, '/');
 
   return (
-    <Link href={resolvedHref} className={className} {...rest}>
-      {children}
+    <Link
+      href={resolvedHref}
+      className={props.className}
+      id={props.id}
+      replace={props.replace}
+      scroll={props.scroll}
+      shallow={props.shallow}
+      prefetch={props.prefetch}
+      locale={props.locale}>
+      {props.children}
     </Link>
   );
 }
