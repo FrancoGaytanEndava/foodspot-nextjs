@@ -10,23 +10,20 @@ interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export default function Button(props: PropsWithChildren<IButtonProps>): JSX.Element {
+  const baseClasses = [styles.button, styles[`size-${props.size ?? 'auto'}`]];
+
+  const conditionalClasses = {
+    [styles.primary]: props.kind === 'primary',
+    [styles.secondary]: props.kind === 'secondary',
+    [styles.tertiary]: props.kind === 'tertiary',
+    [styles.validation]: props.kind === 'validation',
+    [styles.whitePrimary]: props.kind === 'whitePrimary',
+    [styles.whiteSecondary]: props.kind === 'whiteSecondary',
+    [props.className ?? '']: !!props.className,
+  };
+
   return (
-    <button
-      onClick={props.onClick}
-      {...className(
-        styles.button,
-        styles[props.kind ?? 'primary'],
-        styles[props.kind ?? 'secondary'],
-        styles[props.kind ?? 'tertiary'],
-        styles[props.kind ?? 'validation'],
-        styles[props.kind ?? 'whitePrimary'],
-        styles[props.kind ?? 'whiteSecondary'],
-        props.className ?? '',
-        styles[`size-${props.size ?? 'auto'}`]
-      )}
-      style={{ ...props.style }}
-      id={props.id}
-    >
+    <button onClick={props.onClick} {...className(baseClasses, conditionalClasses)} style={{ ...props.style }} id={props.id}>
       {props.children}
     </button>
   );

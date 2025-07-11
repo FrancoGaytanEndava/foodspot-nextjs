@@ -1,7 +1,7 @@
 import { IUploadFileResponse } from '@models/transfer';
 import { localStorageKeys } from '@utils/localStorageKeys';
 
-const baseURL = process.env.NEXT_PUBLIC_ENDPOINT;
+const baseURL = process.env.NEXT_PUBLIC_API_ENDPOINT;
 
 function getToken(): string | null {
   if (typeof window !== 'undefined') {
@@ -58,11 +58,7 @@ export async function __getFiles(path: string, signal?: AbortSignal): Promise<Bl
   }
 }
 
-export async function _post<T, P = unknown>(
-  path: string,
-  payload?: P,
-  signal?: AbortSignal
-): Promise<T> {
+export async function _post<T, P = unknown>(path: string, payload?: P, signal?: AbortSignal): Promise<T> {
   try {
     const response = await fetch(`${baseURL}${path}`, {
       method: 'POST',
@@ -82,11 +78,7 @@ export async function _post<T, P = unknown>(
   }
 }
 
-export async function _postFiles(
-  formFile: any,
-  path: string,
-  signal?: AbortSignal
-): Promise<IUploadFileResponse> {
+export async function _postFiles(formFile: any, path: string, signal?: AbortSignal): Promise<IUploadFileResponse> {
   try {
     const formData = new FormData();
     formData.append('file', formFile);
@@ -111,11 +103,7 @@ export async function _postFiles(
   }
 }
 
-export async function _put<T, P = unknown>(
-  path: string,
-  payload: P,
-  signal?: AbortSignal
-): Promise<T> {
+export async function _put<T, P = unknown>(path: string, payload: P, signal?: AbortSignal): Promise<T> {
   try {
     const response = await fetch(`${baseURL}${path}`, {
       method: 'PUT',
