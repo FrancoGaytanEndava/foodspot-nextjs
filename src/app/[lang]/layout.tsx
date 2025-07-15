@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { Providers } from './providers';
 import '@styles/main.scss';
 import '@styles/globals.css';
+import AlertPortal from '@components/micro/AlertPortal/AlertPortal';
 
 // Next incluye fuentes de Google por defecto, pero si queres usar una fuente diferente podes importarla.
 // En este caso, se esta usando la fuente Geist y Geist Mono.
@@ -31,7 +32,10 @@ export default async function RootLayout(props: RootLayoutProps) {
       </head>
 
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Providers lang={lang}>{props.children}</Providers>
+        <div id="alert-root" />
+        <Providers lang={lang}>
+          <AlertPortal /> {props.children}
+        </Providers>
       </body>
     </html>
   );

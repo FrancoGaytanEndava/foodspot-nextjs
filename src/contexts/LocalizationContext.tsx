@@ -10,6 +10,7 @@ import { getLocaleFromCookie } from '@utils/localeCookies';
 interface ILocalizationContext {
   locale: Locale;
   setLocale: Dispatch<SetStateAction<Locale>>;
+  getUrlClient: (route: string) => string;
 }
 
 const LocalizationContext = createContext<ILocalizationContext>({} as ILocalizationContext);
@@ -40,7 +41,11 @@ export function LocalizationProvider(props: LocalizationProviderProps) {
     }
   }, [pathname, props.lang]);
 
-  return <LocalizationContext.Provider value={{ locale, setLocale }}>{props.children}</LocalizationContext.Provider>;
+  const getUrlClient = (route: string): string => {
+    return `/${locale.id}/${route}`;
+  };
+
+  return <LocalizationContext.Provider value={{ locale, setLocale, getUrlClient }}>{props.children}</LocalizationContext.Provider>;
 }
 
 export function useLocalizationContext(): ILocalizationContext {

@@ -1,103 +1,38 @@
 'use client';
 
-import { useState, useRef } from 'react';
 import FormLayout from '@components/macro/layout/FormLayout';
 import { useTranslation } from '@contexts/LocalizationContext';
-import { useRouter } from 'next/navigation';
-import { useAlert } from '@contexts/AlertContext';
-import { recoverPassword, verifyCode } from '@services/password';
-import AlertPopup, { AlertTypes } from '@components/micro/AlertPopup';
 import { EmailInput } from '@components/micro/Inputs/EmailInput';
 import { PasswordInput } from '@components/micro/Inputs/PasswordInput';
 import TextInput from '@components/micro/Inputs/TextInput';
 import Button from '@components/micro/Button';
 import styles from './styles.module.scss';
-
-interface InitialNewPasswordInterface {
-  userEmail: string;
-  userVerificationCode: string;
-  userPassword: string;
-  userConfirmedPassword: string;
-}
+import { useSettingNewPasswordState } from '@hooks/useSettingNewPasswordState';
 
 export default function SettingNewPasswordForm() {
   const lang = useTranslation('settingNewPassword');
-  const router = useRouter();
-  const { setAlert } = useAlert();
 
-  const [newPassword, setNewPassword] = useState<InitialNewPasswordInterface>({
-    userEmail: '',
-    userVerificationCode: '',
-    userPassword: '',
-    userConfirmedPassword: '',
-  });
-
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const confirmPasswordRef = useRef<HTMLInputElement>(null);
-
-  const validatePassword = (password: string): boolean => {
-    const expReg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-    return expReg.test(password);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (newPassword.userPassword !== newPassword.userConfirmedPassword) {
-      setAlert(lang.passwordsDontMatch, AlertTypes.ERROR);
-      return;
-    }
-
-    if (!validatePassword(newPassword.userPassword)) {
-      setAlert(lang.wrongPassword, AlertTypes.ERROR);
-      return;
-    }
-
-    try {
-      await verifyCode({
-        email: newPassword.userEmail,
-        verificationCode: newPassword.userVerificationCode,
-      });
-
-      await recoverPassword({
-        email: newPassword.userEmail,
-        verificationCode: newPassword.userVerificationCode,
-        password: newPassword.userPassword,
-      });
-
-      setAlert(lang.emailChangedSuccessfully, AlertTypes.INFO);
-      setTimeout(() => router.push('/login'), 1000);
-    } catch (e) {
-      console.log(e);
-      setAlert(lang.couldntUpdatePassword, AlertTypes.ERROR);
-    }
-  };
+  const { credentials, updateField, handleSubmit, passwordRef, confirmPasswordRef } = useSettingNewPasswordState(lang);
 
   return (
     <FormLayout onSubmit={handleSubmit}>
-      <AlertPopup />
       <div className={styles.settingNewPasswordContainer}>
         <h1>{lang.setNewPasswordTitle}</h1>
 
-        <EmailInput
-          label={lang.email}
-          placeholder={lang.email}
-          value={newPassword.userEmail}
-          onChange={val => setNewPassword(prev => ({ ...prev, userEmail: val }))}
-        />
+        <EmailInput label={lang.email} placeholder={lang.email} value={credentials.userEmail} onChange={val => updateField('userEmail', val)} />
 
         <TextInput
           label={lang.verificationCode}
           placeholder={lang.verificationCode}
-          value={newPassword.userVerificationCode}
-          onChange={val => setNewPassword(prev => ({ ...prev, userVerificationCode: val }))}
+          value={credentials.userVerificationCode}
+          onChange={val => updateField('userVerificationCode', val)}
         />
 
         <PasswordInput
           label={lang.password}
           placeholder={lang.password}
-          value={newPassword.userPassword}
-          onChange={val => setNewPassword(prev => ({ ...prev, userPassword: val }))}
+          value={credentials.userPassword}
+          onChange={val => updateField('userPassword', val)}
           inputRef={passwordRef}
         />
 
@@ -106,8 +41,8 @@ export default function SettingNewPasswordForm() {
         <PasswordInput
           label={lang.confirmPassword}
           placeholder={lang.confirmPassword}
-          value={newPassword.userConfirmedPassword}
-          onChange={val => setNewPassword(prev => ({ ...prev, userConfirmedPassword: val }))}
+          value={credentials.userConfirmedPassword}
+          onChange={val => updateField('userConfirmedPassword', val)}
           inputRef={confirmPasswordRef}
         />
 

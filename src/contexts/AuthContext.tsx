@@ -60,7 +60,7 @@ export function AuthProvider(props: { children: React.ReactNode }): JSX.Element 
     localStorage.removeItem(localStorageKeys.user);
     localStorage.removeItem(localStorageKeys.token);
     setUser(null);
-    router.push(`/${langId}/login`); //Fijate aca, algo no le esta gustando al hacer el logout
+    router.push(`/${langId}/login`);
   }
 
   function getUserFromLocalStorage(): LoginResponse {

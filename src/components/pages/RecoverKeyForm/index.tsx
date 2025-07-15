@@ -2,28 +2,30 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useTranslation } from '@contexts/LocalizationContext';
+import { useLocalizationContext, useTranslation } from '@contexts/LocalizationContext';
 import { useAlert } from '@contexts/AlertContext';
 import { forgotPassword } from '@services/password';
-import AlertPopup, { AlertTypes } from '@components/micro/AlertPopup';
+import { AlertTypes } from '@components/micro/AlertPopup';
 import { EmailInput } from '@components/micro/Inputs/EmailInput';
 import Button from '@components/micro/Button';
 import styles from './styles.module.scss';
 import FormLayout from '@components/macro/layout/FormLayout';
-import { getUrl } from '@utils/utilities';
+import { showAlert } from '@utils/alertService';
+import AlertPortal from '@components/micro/AlertPortal/AlertPortal';
 
 export default function RecoverKeyForm() {
   const lang = useTranslation('recoverKey');
   const [userEmail, setUserEmail] = useState('');
   const { setAlert } = useAlert();
   const router = useRouter();
+  const { getUrlClient } = useLocalizationContext();
 
   async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     try {
       await forgotPassword({ email: userEmail });
-      router.push(getUrl('settingNewPassword'));
-      setAlert(lang.emailSentConfirmation, AlertTypes.INFO);
+      router.push(getUrlClient('settingNewPassword'));
+      showAlert('Recover email sent!', AlertTypes.INFO);
     } catch (e) {
       console.error(e);
       setAlert('error', AlertTypes.ERROR);
@@ -32,7 +34,7 @@ export default function RecoverKeyForm() {
 
   return (
     <FormLayout>
-      <AlertPopup />
+      <AlertPortal />
       <div className={styles.recoverKeyContainer}>
         <h1>{lang.newPassword}</h1>
 

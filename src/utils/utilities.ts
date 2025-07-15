@@ -1,6 +1,5 @@
 'use client';
 import '@cyntler/react-doc-viewer/dist/index.css';
-import { getLocaleFromCookie } from './localeCookies';
 
 export function parseMinutes(minutes: string) {
   let newMinutes = minutes;
@@ -47,9 +46,4 @@ export function getBrowserName(): string {
     default:
       return 'other';
   }
-}
-
-export function getUrl(route: string): string {
-  const locale = getLocaleFromCookie();
-  return `/${locale}/${route}`;
 }
