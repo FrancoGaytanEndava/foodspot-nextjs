@@ -17,13 +17,13 @@ interface IAuthContext {
   isRedirecting: string | null;
   setRedirection: (currentDirection: string | null) => void;
   setUser: React.Dispatch<SetStateAction<LoginResponse | null>>;
-  logout: () => void;
+  logout: (langId: string) => void;
   login: (email: string, password: string) => void;
 }
 
 const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
-export function AuthProvider({ children }: { children: React.ReactNode }): JSX.Element {
+export function AuthProvider(props: { children: React.ReactNode }): JSX.Element {
   const router = useRouter();
   const [user, setUser] = useState<LoginResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,9 +31,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }): JSX.E
   const { setAlert } = useAlert();
   const lang = useTranslation('login');
 
-  /**
-   * Logs in user
-   */
   function login(email: string, password: string): void {
     setIsLoading(true);
 
@@ -59,23 +56,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }): JSX.E
       .finally(() => setIsLoading(false));
   }
 
-  /**
-   * Logs out current user
-   */
-  function logout() {
+  function logout(langId: string) {
     localStorage.removeItem(localStorageKeys.user);
     localStorage.removeItem(localStorageKeys.token);
     setUser(null);
-    router.push('/login');
+    router.push(`/${langId}/login`); //Fijate aca, algo no le esta gustando al hacer el logout
   }
 
   function getUserFromLocalStorage(): LoginResponse {
     return JSON.parse(localStorage.getItem(localStorageKeys.user) ?? '{}');
   }
 
-  /**
-   * Checks if user is auth
-   */
   function isAuthenticated(): boolean {
     return !!getUserFromLocalStorage();
   }
@@ -88,9 +79,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }): JSX.E
     }
   }
 
-  /**
-   * Looks for a logged user when app initialize
-   */
   useEffect(() => {
     if (!user) {
       setUser(getUserFromLocalStorage());
@@ -111,7 +99,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }): JSX.E
         logout,
         login,
       }}>
-      {children}
+      {props.children}
     </AuthContext.Provider>
   );
 }

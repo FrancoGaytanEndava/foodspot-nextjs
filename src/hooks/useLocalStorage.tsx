@@ -18,7 +18,7 @@ export default function useLocalStorage<T>(key: string, initialValue: T): Return
         setStoredValue(parsed);
       }
     } catch (error) {
-      console.error('Error reading localStorage key:', key, error);
+      console.log('Error reading localStorage key:', key, error);
     }
   }, [key]);
 

@@ -19,7 +19,7 @@ const initialState: IAlertContext = {
 
 const AlertContext = createContext<IAlertContext>(initialState);
 
-export function AlertProvider({ children }: { children: React.ReactNode }) {
+export function AlertProvider(props: { children: React.ReactNode }) {
   const [text, setText] = useState('');
   const [type, setType] = useState<AlertTypes | null>(null);
 
@@ -39,9 +39,8 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
         text,
         type,
         setAlert,
-      }}
-    >
-      {children}
+      }}>
+      {props.children}
     </AlertContext.Provider>
   );
 }

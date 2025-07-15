@@ -7,6 +7,7 @@
   font-family: var(--secondaryFont);
   align-self: flex-start;
   margin-bottom: 10px;
+  display: block;
 
   @media #{variables.media-query(max, lg)} {
     font-weight: variables.font-weight(bold);
@@ -32,4 +33,11 @@
   &:focus {
     box-shadow: var(--inputShadow);
   }
+}
+
+.darkInput {
+  border: 1px solid var(--backgroundNeutralDarker);
+}
+.darkLabel {
+  color: var(--backgroundNeutralDarker);
 }

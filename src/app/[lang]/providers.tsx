@@ -13,14 +13,14 @@ interface ProvidersProps {
   lang?: string;
 }
 
-export function Providers({ children, lang }: ProvidersProps) {
+export function Providers(props: ProvidersProps) {
   return (
     <AuthProvider>
       <AlertProvider>
-        <LocalizationProvider lang={lang}>
+        <LocalizationProvider lang={props.lang}>
           <GlobalProvider>
             <EventProvider>
-              <UserProvider>{children}</UserProvider>
+              <UserProvider>{props.children}</UserProvider>
             </EventProvider>
           </GlobalProvider>
         </LocalizationProvider>

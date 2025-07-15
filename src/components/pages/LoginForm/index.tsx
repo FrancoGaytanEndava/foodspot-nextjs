@@ -36,7 +36,7 @@ export default function LoginForm() {
         </Button>
       )}
 
-      <LinkCustom href="/recoverkey" className={styles.forgotPassword}>
+      <LinkCustom href="/recoverKey" className={styles.forgotPassword}>
         {lang.forgotPassword}
       </LinkCustom>
 

@@ -6,19 +6,20 @@ interface EmailInputProps {
   label: string;
   placeholder: string;
   className?: string;
+  darkInput?: boolean;
 }
 
 export function EmailInput(props: EmailInputProps) {
   return (
     <>
-      <label htmlFor="email" className={styles.loginLabel}>
+      <label htmlFor="email" className={`${styles.loginLabel} ${props.darkInput ? styles.darkLabel : ''}`}>
         {props.label}
       </label>
       <input
         id="email"
-        className={`${styles.loginInput} ${props.className ?? ''}`}
+        className={`${styles.loginInput}  ${props.darkInput ? styles.darkInput : ''} ${props.className ?? ''}`}
         placeholder={props.placeholder}
-        type="text"
+        type="email"
         value={props.value}
         onChange={e => props.onChange(e.target.value)}
         aria-label="Email"

@@ -19,12 +19,12 @@ interface LocalizationProviderProps {
   lang?: string;
 }
 
-export function LocalizationProvider({ children, lang }: LocalizationProviderProps) {
+export function LocalizationProvider(props: LocalizationProviderProps) {
   const [locale, setLocale] = useState<Locale>(defaultLocale);
   const pathname = usePathname();
 
   useEffect(() => {
-    const langId = lang ?? pathname.split('/')[1];
+    const langId = props.lang ?? pathname.split('/')[1];
     const matched = locales.find(l => l.id.toLowerCase() === langId?.toLowerCase());
 
     if (matched && matched.id !== locale.id) {
@@ -38,9 +38,9 @@ export function LocalizationProvider({ children, lang }: LocalizationProviderPro
         setLocale(defaultLocale);
       }
     }
-  }, [pathname, lang]);
+  }, [pathname, props.lang]);
 
-  return <LocalizationContext.Provider value={{ locale, setLocale }}>{children}</LocalizationContext.Provider>;
+  return <LocalizationContext.Provider value={{ locale, setLocale }}>{props.children}</LocalizationContext.Provider>;
 }
 
 export function useLocalizationContext(): ILocalizationContext {

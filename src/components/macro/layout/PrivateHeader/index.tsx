@@ -1,28 +1,24 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useLocalizationContext, useTranslation } from '@contexts/LocalizationContext';
-import { useAuth } from '@contexts/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
-import styles from './styles.module.scss';
-import { locales } from '@localization/index';
+import { useAuth } from '@contexts/AuthContext';
+import { useLocalizationContext, useTranslation } from '@contexts/LocalizationContext';
 import { getUserById } from '@services/userService';
-import { IPublicUser } from '@models/user';
 import { getImage } from '@services/purchaseReceipts';
+import { locales } from '@localization/index';
+import { IPublicUser } from '@models/user';
+import styles from './privateHeader.module.scss';
 
-interface PrivateFormLayoutProps {
-  children: React.ReactNode;
-}
-
-export default function PrivateFormLayout(props: PrivateFormLayoutProps) {
-  const localeContext = useLocalizationContext();
-  const authContext = useAuth();
-  const translation = useTranslation('userProfile');
+export default function PrivateHeader() {
   const router = useRouter();
   const pathname = usePathname();
+  const authContext = useAuth();
+  const localeContext = useLocalizationContext();
+  const translation = useTranslation('userProfile');
 
-  const [userData, setUserData] = useState<IPublicUser | undefined>(undefined);
-  const [image, setImage] = useState<File | undefined>(undefined);
+  const [userData, setUserData] = useState<IPublicUser | undefined>();
+  const [image, setImage] = useState<File | undefined>();
 
   useEffect(() => {
     if (authContext.user) {
@@ -32,53 +28,48 @@ export default function PrivateFormLayout(props: PrivateFormLayoutProps) {
           if (resp.profilePicture) {
             getImage(resp.profilePicture)
               .then(res => setImage(res))
-              .catch(e => console.error('Catch in context: ', e));
+              .catch(e => console.error('Error loading image:', e));
           }
         })
-        .catch(e => console.error('Catch in context:', e));
+        .catch(e => console.error('Error loading user data:', e));
     }
   }, [authContext.user]);
 
-  function handleLogout(e: React.MouseEvent<HTMLButtonElement>) {
+  const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     authContext.logout(localeContext.locale.id);
-  }
+  };
 
-  function handleGoToProfile(e: React.MouseEvent) {
+  const handleGoToProfile = (e: React.MouseEvent) => {
     e.preventDefault();
     router.push(`/${localeContext.locale.id}/userProfile`);
-  }
+  };
 
-  function handleGoToMain(e: React.MouseEvent) {
+  const handleGoToMain = (e: React.MouseEvent) => {
     e.preventDefault();
     router.push(`/${localeContext.locale.id}`);
-  }
+  };
 
-  function switchLanguage(langId: string) {
-    const selected = locales.find(function (l) {
-      return l.id === langId;
-    });
-
+  const switchLanguage = (langId: string) => {
+    const selected = locales.find(l => l.id === langId);
     if (!selected) return;
 
     localeContext.setLocale(selected);
-    if (typeof document !== 'undefined') {
-      document.cookie = `locale=${langId}; path=/; max-age=${60 * 60 * 24 * 365}`;
-    }
+    document.cookie = `locale=${langId}; path=/; max-age=${60 * 60 * 24 * 365}`;
 
     const newPath = pathname.replace(/^\/[a-zA-Z-]+/, `/${langId}`);
     router.push(newPath);
-  }
+  };
 
   return (
-    <div className={styles.privateContainer}>
+    <div className={styles.headerWrapper}>
       <header className={styles.privateHeader}>
         <nav className={styles.navbar}>
           {!!authContext.user?.name && (
             <div className={styles.welcomeMsg}>
               {translation.headerWelcome} {authContext.user.name}
               {userData?.profilePicture && image instanceof Blob ? (
-                <img className={styles.profileBtn} src={URL.createObjectURL(image)} alt="selected" onClick={handleGoToProfile} />
+                <img className={styles.profileBtn} src={URL.createObjectURL(image)} alt="profile" onClick={handleGoToProfile} />
               ) : (
                 <img src="/assets/pictures/profile.png" className={styles.profileBtn} alt="placeholder" onClick={handleGoToProfile} />
               )}
@@ -86,7 +77,6 @@ export default function PrivateFormLayout(props: PrivateFormLayoutProps) {
               <button className={styles.englishFlag} onClick={() => switchLanguage('en-US')} />
             </div>
           )}
-
           <div className={styles.logoutBtnSection}>
             <button className={styles.logoutBtn} onClick={handleLogout}>
               {!!authContext.user?.name ? translation.logoutBtn : translation.loginBtn}
@@ -99,10 +89,6 @@ export default function PrivateFormLayout(props: PrivateFormLayoutProps) {
         <button className={styles.logo} onClick={handleGoToMain}></button>
         <div className={styles.fire}></div>
       </section>
-
-      <section className={styles.containerLayout}>{props.children}</section>
-
-      <footer className={styles.footerFire}></footer>
     </div>
   );
 }

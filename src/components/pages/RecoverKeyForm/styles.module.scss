@@ -1,0 +1,46 @@
+@use '/src/styles/variables' as variables;
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+.recoverKeyContainer {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-family: var(--secondaryFont);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 420px;
+  width: 100%;
+
+  h1 {
+    color: var(--backgroundNeutralLighter);
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    align-self: center;
+  }
+
+  .mainDesc {
+    margin-bottom: 30px;
+    max-width: 350px;
+    color: var(--backgroundNeutralLighter);
+    font-size: 1rem;
+  }
+
+  .input {
+    margin-top: 5px;
+    color: var(--backgroundNeutralLighter);
+    font-family: var(--secondaryFont);
+    width: 100%;
+    min-height: 40px;
+    margin-bottom: 0px;
+
+    &::placeholder {
+      color: var(--placeholderColor);
+    }
+
+    &:focus {
+      box-shadow: var(--inputShadow);
+    }
+  }
+}
