@@ -9,13 +9,13 @@
   align-items: flex-start;
   max-width: 420px;
   width: 100%;
-  margin: 60px auto 150px auto;
 
   h1 {
     color: var(--backgroundNeutralLighter);
     font-size: 2rem;
     font-weight: bold;
     margin-bottom: 2rem;
+    align-self: center;
   }
 
   .mainDesc {
@@ -25,19 +25,18 @@
     font-size: 1rem;
   }
 
-  :global(.customInput) {
-    margin-bottom: 20px;
-  }
+  .input {
+    margin-top: 5px;
+    color: var(--backgroundNeutralLighter);
+    font-family: var(--secondaryFont);
+    min-height: 40px;
 
-  @media #{variables.media-query(max, lg)} {
-    margin: 40px auto 100px auto;
-
-    h1 {
-      font-size: 1.5rem;
+    &::placeholder {
+      color: var(--placeholderColor);
     }
 
-    .mainDesc {
-      font-size: 0.95rem;
+    &:focus {
+      box-shadow: var(--inputShadow);
     }
   }
 }

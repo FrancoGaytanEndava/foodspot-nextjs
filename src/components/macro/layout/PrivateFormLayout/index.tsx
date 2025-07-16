@@ -1,23 +1,21 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useLocalizationContext, useTranslation } from '@contexts/LocalizationContext';
 import { useAuth } from '@contexts/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
 import styles from './styles.module.scss';
-import { locales } from '@localization/index';
 import { getUserById } from '@services/userService';
 import { IPublicUser } from '@models/user';
 import { getImage } from '@services/purchaseReceipts';
+import { useTranslation } from '@hooks/useLocalization';
 
 interface PrivateFormLayoutProps {
   children: React.ReactNode;
 }
 
 export default function PrivateFormLayout(props: PrivateFormLayoutProps) {
-  const localeContext = useLocalizationContext();
   const authContext = useAuth();
-  const translation = useTranslation('userProfile');
+  const { t, lang } = useTranslation('userProfile');
   const router = useRouter();
   const pathname = usePathname();
 
@@ -41,27 +39,20 @@ export default function PrivateFormLayout(props: PrivateFormLayoutProps) {
 
   function handleLogout(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
-    authContext.logout(localeContext.locale.id);
+    authContext.logout(lang);
   }
 
   function handleGoToProfile(e: React.MouseEvent) {
     e.preventDefault();
-    router.push(`/${localeContext.locale.id}/userProfile`);
+    router.push(`/${lang}/userProfile`);
   }
 
   function handleGoToMain(e: React.MouseEvent) {
     e.preventDefault();
-    router.push(`/${localeContext.locale.id}`);
+    router.push(`/${lang}`);
   }
 
   function switchLanguage(langId: string) {
-    const selected = locales.find(function (l) {
-      return l.id === langId;
-    });
-
-    if (!selected) return;
-
-    localeContext.setLocale(selected);
     if (typeof document !== 'undefined') {
       document.cookie = `locale=${langId}; path=/; max-age=${60 * 60 * 24 * 365}`;
     }
@@ -76,7 +67,7 @@ export default function PrivateFormLayout(props: PrivateFormLayoutProps) {
         <nav className={styles.navbar}>
           {!!authContext.user?.name && (
             <div className={styles.welcomeMsg}>
-              {translation.headerWelcome} {authContext.user.name}
+              {t.headerWelcome} {authContext.user.name}
               {userData?.profilePicture && image instanceof Blob ? (
                 <img className={styles.profileBtn} src={URL.createObjectURL(image)} alt="selected" onClick={handleGoToProfile} />
               ) : (
@@ -89,7 +80,7 @@ export default function PrivateFormLayout(props: PrivateFormLayoutProps) {
 
           <div className={styles.logoutBtnSection}>
             <button className={styles.logoutBtn} onClick={handleLogout}>
-              {!!authContext.user?.name ? translation.logoutBtn : translation.loginBtn}
+              {!!authContext.user?.name ? t.logoutBtn : t.loginBtn}
             </button>
           </div>
         </nav>

@@ -1,5 +1,5 @@
-import { enUS } from './en-us';
-import { esAr } from './es-ar';
+import enUS from './en-US';
+import esAr from './es-AR';
 
 export type Translation = typeof enUS;
 

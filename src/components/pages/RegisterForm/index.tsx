@@ -1,7 +1,7 @@
 'use client';
 
 import FormLayout from '@components/macro/layout/FormLayout';
-import { useTranslation } from '@contexts/LocalizationContext';
+import { useTranslation } from '@hooks/useLocalization';
 import { useRegisterFormState } from '@hooks/useRegisterFormState';
 import { EmailInput } from '@components/micro/Inputs/EmailInput';
 import { PasswordInput } from '@components/micro/Inputs/PasswordInput';
@@ -9,35 +9,36 @@ import Button from '@components/micro/Button';
 import styles from './styles.module.scss';
 import TextInput from '@components/micro/Inputs/TextInput';
 import SpecialDietCheckboxGroup from './SpecialDietCheckboxGroup';
+import { Translation } from '@localization/index';
 
 export default function RegisterForm() {
-  const lang = useTranslation('register');
+  const { t } = useTranslation<Translation['register']>('register');
 
-  const { credentials, updateField, dietOptions, updateDietOption, passwordRef, confirmPasswordRef, handleSubmit } = useRegisterFormState(lang);
+  const { credentials, updateField, dietOptions, updateDietOption, passwordRef, confirmPasswordRef, handleSubmit } = useRegisterFormState(t);
 
   return (
     <FormLayout onSubmit={handleSubmit}>
-      <h3 className={styles.title}>{lang.registerTitle}</h3>
+      <h3 className={styles.title}>{t.registerTitle}</h3>
 
       <div className={styles.inputSection}>
         <section className={styles.firstColumn}>
           <TextInput
-            label={lang.name}
-            placeholder={lang.name}
+            label={t.name}
+            placeholder={t.name}
             value={credentials.name}
             onChange={value => updateField('name', value)}
             className={styles.registerInput}
           />
           <TextInput
-            label={lang.lastName}
-            placeholder={lang.lastName}
+            label={t.lastName}
+            placeholder={t.lastName}
             value={credentials.lastName}
             onChange={value => updateField('lastName', value)}
             className={styles.registerInput}
           />
           <EmailInput
-            label={lang.email}
-            placeholder={lang.emailPlaceholder}
+            label={t.email}
+            placeholder={t.emailPlaceholder}
             value={credentials.email}
             onChange={value => updateField('email', value)}
             className={styles.registerInput}
@@ -46,8 +47,8 @@ export default function RegisterForm() {
 
         <section className={styles.secondColumn}>
           <PasswordInput
-            label={lang.password}
-            placeholder={lang.password}
+            label={t.password}
+            placeholder={t.password}
             value={credentials.password}
             onChange={value => updateField('password', value)}
             inputRef={passwordRef}
@@ -55,8 +56,8 @@ export default function RegisterForm() {
           />
 
           <PasswordInput
-            label={lang.confirmPassword}
-            placeholder={lang.password}
+            label={t.confirmPassword}
+            placeholder={t.password}
             value={credentials.repeatedPassword as string}
             onChange={value => updateField('repeatedPassword', value)}
             inputRef={confirmPasswordRef}
@@ -66,13 +67,13 @@ export default function RegisterForm() {
           <SpecialDietCheckboxGroup
             values={dietOptions}
             labels={{
-              isVegan: lang.specialDietOptions.vegan,
-              isVegetarian: lang.specialDietOptions.vegetarian,
-              isHypertensive: lang.specialDietOptions.hypertensive,
-              isCeliac: lang.specialDietOptions.celiac,
+              isVegan: t.specialDietOptions?.vegan,
+              isVegetarian: t.specialDietOptions?.vegetarian,
+              isHypertensive: t.specialDietOptions?.hypertensive,
+              isCeliac: t.specialDietOptions?.celiac,
             }}
-            title={lang.specialDiet}
-            description={lang.specialDietOptional}
+            title={t.specialDiet}
+            description={t.specialDietOptional}
             onChange={(params: { key: keyof typeof dietOptions; checked: boolean }) => updateDietOption(params.key, params.checked)}
           />
         </section>
@@ -80,7 +81,7 @@ export default function RegisterForm() {
 
       <section className={styles.buttonContainer}>
         <Button type="submit" kind="primary" size="large" id="registerBtn">
-          {lang.registerBtn}
+          {t.registerBtn}
         </Button>
       </section>
     </FormLayout>

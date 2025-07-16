@@ -1,0 +1,76 @@
+@use '/src/styles/variables' as variables;
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+.toast {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 2;
+  padding: 12px 20px;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  min-width: 300px;
+  max-width: 400px;
+  opacity: 0;
+  animation: fadeInOut 3s ease-in-out forwards;
+
+  &.info {
+    background: var(--messageInfoPrimary);
+  }
+  &.success {
+    background: var(--messageSuccessPrimary);
+  }
+  &.error {
+    background: var(--messageErrorPrimary);
+  }
+  &.warning {
+    background: var(--messageWarningPrimary);
+    color: var(--backgroundNeutralDarker);
+  }
+
+  @media #{variables.media-query(max, lg)} {
+    bottom: auto;
+    top: 16px;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    width: 70%;
+  }
+}
+
+.toastIcon {
+  margin-right: 12px;
+  font-size: 24px;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+}

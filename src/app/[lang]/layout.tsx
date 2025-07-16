@@ -1,13 +1,10 @@
 import { Geist, Geist_Mono } from 'next/font/google';
 import type { Metadata } from 'next';
-
-import { Providers } from './providers';
 import '@styles/main.scss';
 import '@styles/globals.css';
-import AlertPortal from '@components/micro/AlertPortal/AlertPortal';
+import ToastContainer from '@components/micro/Toaster';
+import { AuthProvider } from '@contexts/AuthContext';
 
-// Next incluye fuentes de Google por defecto, pero si queres usar una fuente diferente podes importarla.
-// En este caso, se esta usando la fuente Geist y Geist Mono.
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
 
@@ -32,10 +29,9 @@ export default async function RootLayout(props: RootLayoutProps) {
       </head>
 
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div id="alert-root" />
-        <Providers lang={lang}>
-          <AlertPortal /> {props.children}
-        </Providers>
+        <AuthProvider>
+          <ToastContainer /> {props.children}
+        </AuthProvider>
       </body>
     </html>
   );

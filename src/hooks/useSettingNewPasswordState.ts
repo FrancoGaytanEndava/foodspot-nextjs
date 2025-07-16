@@ -3,8 +3,7 @@
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { recoverPassword, verifyCode } from '@services/password';
-import { AlertTypes } from '@components/micro/AlertPopup';
-import { useAlert } from '@contexts/AlertContext';
+import { showToast, ToastType } from '@utils/toastService';
 
 interface InitialNewPasswordInterface {
   userEmail: string;
@@ -15,7 +14,6 @@ interface InitialNewPasswordInterface {
 
 export function useSettingNewPasswordState(lang) {
   const router = useRouter();
-  const { setAlert } = useAlert();
 
   const [credentials, setCredentials] = useState<InitialNewPasswordInterface>({
     userEmail: '',
@@ -40,12 +38,12 @@ export function useSettingNewPasswordState(lang) {
     e.preventDefault();
 
     if (credentials.userPassword !== credentials.userConfirmedPassword) {
-      setAlert(lang.passwordsDontMatch, AlertTypes.ERROR);
+      showToast(lang.passwordsDontMatch, ToastType.ERROR);
       return;
     }
 
     if (!validatePassword(credentials.userPassword)) {
-      setAlert(lang.wrongPassword, AlertTypes.ERROR);
+      showToast(lang.wrongPassword, ToastType.ERROR);
       return;
     }
 
@@ -61,11 +59,11 @@ export function useSettingNewPasswordState(lang) {
         password: credentials.userPassword,
       });
 
-      setAlert(lang.emailChangedSuccessfully, AlertTypes.INFO);
+      showToast(lang.emailChangedSuccessfully, ToastType.INFO);
       setTimeout(() => router.push('/login'), 1000);
     } catch (e) {
       console.error(e);
-      setAlert(lang.couldntUpdatePassword, AlertTypes.ERROR);
+      showToast(lang.couldntUpdatePassword, ToastType.ERROR);
     }
   };
 

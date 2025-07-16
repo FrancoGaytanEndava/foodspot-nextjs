@@ -1,6 +1,5 @@
 'use client';
 
-import { useTranslation } from '@contexts/LocalizationContext';
 import { useAuth } from '@contexts/AuthContext';
 import Button from '@components/micro/Button';
 import FormLayout from '@components/macro/layout/FormLayout';
@@ -10,9 +9,10 @@ import LinkCustom from '@components/micro/LinkCustom';
 import { EmailInput } from '@components/micro/Inputs/EmailInput';
 import { PasswordInput } from '@components/micro/Inputs/PasswordInput';
 import { useLoginFormState } from '@hooks/useLoginFormState';
+import { useTranslation } from '@hooks/useLocalization';
 
 export default function LoginForm() {
-  const lang = useTranslation('login');
+  const { t } = useTranslation('login');
   const { login, isLoading } = useAuth();
   const { credentials, setEmail, setPassword } = useLoginFormState();
 
@@ -23,26 +23,26 @@ export default function LoginForm() {
 
   return (
     <FormLayout>
-      <h3 className={styles.title}> {lang.loginTitle}</h3>
+      <h3 className={styles.title}> {t.loginTitle}</h3>
 
-      <EmailInput value={credentials.email} onChange={setEmail} label={lang.email} placeholder={lang.user} />
-      <PasswordInput value={credentials.password} onChange={setPassword} label={lang.password} placeholder={lang.password} />
+      <EmailInput value={credentials.email} onChange={setEmail} label={t.email} placeholder={t.user} />
+      <PasswordInput value={credentials.password} onChange={setPassword} label={t.password} placeholder={t.password} />
 
       {isLoading ? (
         <Spinner size={26} strokeWidth={4} />
       ) : (
         <Button kind="primary" size="large" type="submit" onClick={handleLogin}>
-          {lang.loginBtn}
+          {t.loginBtn}
         </Button>
       )}
 
       <LinkCustom href="/recoverKey" className={styles.forgotPassword}>
-        {lang.forgotPassword}
+        {t.forgotPassword}
       </LinkCustom>
 
       <LinkCustom href="/register" className={styles.register} id="register">
-        <span>{lang.alreadyRegistered} </span>
-        <span className={styles.registerHighlighted}>{lang.registerHere}</span>
+        <span>{t.alreadyRegistered} </span>
+        <span className={styles.registerHighlighted}>{t.registerHere}</span>
       </LinkCustom>
     </FormLayout>
   );

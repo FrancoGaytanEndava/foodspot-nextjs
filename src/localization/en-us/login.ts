@@ -1,12 +1,12 @@
-export const login = Object.seal({
-	email: 'Email',
-	password: 'Password',
-	forgotPassword: 'Forgot password',
-	loginTitle:'Login',
-	loginBtn: 'LOGIN',
-	alreadyRegistered: 'Don\'t you have an account',
-	registerHere: 'Register here',
-	user:'user@endava.com',
-	welcomeMessage: 'Welcome',
-	loginErrorMessage: 'The entered data does not match any user.'
+export default Object.seal({
+  email: 'Email',
+  password: 'Password',
+  forgotPassword: 'Forgot password',
+  loginTitle: 'Login',
+  loginBtn: 'LOGIN',
+  alreadyRegistered: "Don't you have an account",
+  registerHere: 'Register here',
+  user: 'user@endava.com',
+  welcomeMessage: 'Welcome',
+  loginErrorMessage: 'The entered data does not match any user.',
 });

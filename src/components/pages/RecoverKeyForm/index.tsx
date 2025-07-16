@@ -1,49 +1,43 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useLocalizationContext, useTranslation } from '@contexts/LocalizationContext';
-import { useAlert } from '@contexts/AlertContext';
 import { forgotPassword } from '@services/password';
-import { AlertTypes } from '@components/micro/AlertPopup';
 import { EmailInput } from '@components/micro/Inputs/EmailInput';
 import Button from '@components/micro/Button';
 import styles from './styles.module.scss';
 import FormLayout from '@components/macro/layout/FormLayout';
-import { showAlert } from '@utils/alertService';
-import AlertPortal from '@components/micro/AlertPortal/AlertPortal';
+import { useCustomRouter } from '@contexts/useCustomRouter';
+import { showToast, ToastType } from '@utils/toastService';
+import { useTranslation } from '@hooks/useLocalization';
 
 export default function RecoverKeyForm() {
-  const lang = useTranslation('recoverKey');
+  const { t } = useTranslation('recoverKey');
   const [userEmail, setUserEmail] = useState('');
-  const { setAlert } = useAlert();
-  const router = useRouter();
-  const { getUrlClient } = useLocalizationContext();
+  const customRouter = useCustomRouter();
 
   async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     try {
       await forgotPassword({ email: userEmail });
-      router.push(getUrlClient('settingNewPassword'));
-      showAlert('Recover email sent!', AlertTypes.INFO);
+      customRouter.pushTo('settingNewPassword');
+      showToast(t.emailSentConfirmation, ToastType.SUCCESS);
     } catch (e) {
       console.error(e);
-      setAlert('error', AlertTypes.ERROR);
+      showToast('error', ToastType.ERROR);
     }
   }
 
   return (
     <FormLayout>
-      <AlertPortal />
       <div className={styles.recoverKeyContainer}>
-        <h1>{lang.newPassword}</h1>
+        <h1>{t.newPassword}</h1>
 
-        <p className={styles.mainDesc}>{lang.changeDescription}</p>
+        <p className={styles.mainDesc}>{t.changeDescription}</p>
 
-        <EmailInput label={lang.email} placeholder={lang.email} value={userEmail} onChange={setUserEmail} className={styles.input} />
+        <EmailInput label={t.email} placeholder={t.email} value={userEmail} onChange={setUserEmail} className={styles.input} />
 
         <Button kind="primary" size="large" id="registerBtn" onClick={handleSubmit} className={styles.sendBtn}>
-          {lang.sendEmail}
+          {t.sendEmail}
         </Button>
       </div>
     </FormLayout>

@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import type { LinkProps } from 'next/link';
-import { useLocalizationContext } from '@contexts/LocalizationContext';
 import { PropsWithChildren } from 'react';
+import { useTranslation } from '@hooks/useLocalization';
 
 interface LinkCustomProps extends LinkProps {
   className?: string;
@@ -11,9 +11,9 @@ interface LinkCustomProps extends LinkProps {
 }
 
 export default function LinkCustom(props: PropsWithChildren<LinkCustomProps>) {
-  const { locale } = useLocalizationContext();
+  const { lang } = useTranslation('navigation');
 
-  const langPrefix = `/${locale.id}`;
+  const langPrefix = `/${lang}`;
   const hrefValue = typeof props.href === 'string' ? props.href : props.href.pathname || '';
   const resolvedHref = `${langPrefix}${hrefValue}`.replace(/\/{2,}/g, '/');
 

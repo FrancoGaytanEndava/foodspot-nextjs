@@ -2,8 +2,7 @@
 import { useState, useRef } from 'react';
 import { RegisterRequest } from '@models/user';
 import { useAuth } from '@contexts/AuthContext';
-import { useAlert } from '@contexts/AlertContext';
-import { AlertTypes } from '@components/micro/AlertPopup';
+import { showToast, ToastType } from '@utils/toastService';
 import useLocalStorage from '@hooks/useLocalStorage';
 import { localStorageKeys } from '@utils/localStorageKeys';
 import { registering } from '@services/userService';
@@ -17,7 +16,7 @@ export interface SpecialDietOptions {
   isCeliac: boolean;
 }
 
-export function useRegisterFormState(lang: Translation['register']) {
+export function useRegisterFormState(t: Translation['register']) {
   const [credentials, setCredentials] = useState<RegisterRequest>({
     email: '',
     password: '',
@@ -40,7 +39,6 @@ export function useRegisterFormState(lang: Translation['register']) {
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const confirmPasswordRef = useRef<HTMLInputElement | null>(null);
 
-  const { setAlert } = useAlert();
   const { setIsLoading } = useAuth();
   const [, setJWT] = useLocalStorage<string | null>(localStorageKeys.token, null);
   const router = useRouter();
@@ -73,11 +71,11 @@ export function useRegisterFormState(lang: Translation['register']) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validatePassword(credentials.password)) {
-      setAlert(lang.wrongPassword, AlertTypes.ERROR);
+      showToast(t.wrongPassword, ToastType.ERROR);
       return;
     }
     if (!doPasswordsMatch()) {
-      setAlert(lang.passwordArentMatching, AlertTypes.ERROR);
+      showToast(t.passwordArentMatching, ToastType.ERROR);
       return;
     }
 
@@ -91,11 +89,11 @@ export function useRegisterFormState(lang: Translation['register']) {
         specialDiet: resolveDiet(),
       });
       setJWT(res.jwt);
-      setAlert(`${lang.successMsg}!`, AlertTypes.SUCCESS);
+      showToast(`${t.successMsg}!`, ToastType.SUCCESS);
       router.push('/login');
     } catch (e) {
       console.error(e);
-      setAlert(lang.failureMsg, AlertTypes.ERROR);
+      showToast(t.failureMsg, ToastType.ERROR);
     } finally {
       setIsLoading(false);
     }

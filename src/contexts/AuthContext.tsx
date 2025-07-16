@@ -4,9 +4,8 @@ import { createContext, useContext, useState, SetStateAction, useEffect, JSX } f
 import { localStorageKeys } from '.././utils/localStorageKeys';
 import { LoginResponse } from '../models/user';
 import { _login } from '../services';
-import { useAlert } from './AlertContext';
-import { AlertTypes } from '../components/micro/AlertPopup';
-import { useTranslation } from './LocalizationContext';
+import { ToastType, showToast } from '@utils/toastService';
+import { useTranslation } from '@hooks/useLocalization';
 
 interface IAuthContext {
   user: LoginResponse | null;
@@ -28,8 +27,7 @@ export function AuthProvider(props: { children: React.ReactNode }): JSX.Element 
   const [user, setUser] = useState<LoginResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState<string | null>(null);
-  const { setAlert } = useAlert();
-  const lang = useTranslation('login');
+  const { t } = useTranslation('login');
 
   function login(email: string, password: string): void {
     setIsLoading(true);
@@ -39,7 +37,7 @@ export function AuthProvider(props: { children: React.ReactNode }): JSX.Element 
         localStorage.setItem(localStorageKeys.user, JSON.stringify(res));
         localStorage.setItem(localStorageKeys.token, JSON.stringify(res.jwt));
         setUser(res);
-        setAlert(`${lang.welcomeMessage} ${res.name}!`, AlertTypes.SUCCESS);
+        showToast(`${t.welcomeMessage} ${res.name}!`, ToastType.SUCCESS);
 
         if (isRedirecting) {
           router.push(`${isRedirecting}`);
@@ -51,7 +49,7 @@ export function AuthProvider(props: { children: React.ReactNode }): JSX.Element 
       })
       .catch(error => {
         console.error(error);
-        setAlert(lang.loginErrorMessage, AlertTypes.ERROR);
+        showToast(t.loginErrorMessage, ToastType.ERROR);
       })
       .finally(() => setIsLoading(false));
   }
