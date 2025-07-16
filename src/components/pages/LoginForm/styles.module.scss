@@ -18,33 +18,3 @@
     font-size: 30px;
   }
 }
-
-.forgotPassword {
-  font-size: 16px;
-  font-family: var(--secondaryFont);
-  font-weight: variables.font-weight(bold);
-  text-decoration: none;
-  color: var(--backgroundNeutralLighter);
-  margin: 30px auto;
-  align-self: flex-end;
-}
-
-.register {
-  font-size: 16px;
-  font-family: var(--secondaryFont);
-  font-weight: variables.font-weight(bold);
-  text-decoration: none;
-  color: var(--backgroundNeutralLighter);
-  margin: 0px auto 30px auto;
-  align-self: flex-end;
-
-  .registerHighlighted {
-    color: var(--btnPrimary);
-  }
-
-  &:hover {
-    .registerHighlighted {
-      color: var(--btnPrimaryDarker);
-    }
-  }
-}

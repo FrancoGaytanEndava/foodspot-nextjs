@@ -4,8 +4,9 @@ import styles from './styles.module.scss';
 import { getBrowserName } from '@utils/utilities';
 
 interface PasswordInputProps {
-  value: string;
-  onChange: (value: string) => void;
+  name?: string;
+  value?: string;
+  onChange?: (value: string) => void;
   label: string;
   placeholder: string;
   className?: string;
@@ -30,12 +31,13 @@ export function PasswordInput(props: PasswordInputProps) {
       <section className={styles.inputPasswordSection}>
         <input
           id="password"
+          name={props.name}
           ref={inputRef}
           className={`${styles.loginInput} ${props.className ?? ''}`}
           placeholder={props.placeholder}
           type={!canRenderEye ? 'password' : showPassword ? 'password' : 'text'}
           value={props.value}
-          onChange={e => props.onChange(e.target.value)}
+          onChange={e => props.onChange?.(e.target.value)}
           aria-label="Password"
         />
         {canRenderEye && (

@@ -1,7 +1,7 @@
 'use client';
 
 import FormLayout from '@components/macro/layout/FormLayout';
-import { useTranslation } from '@hooks/useLocalization';
+import { useTranslation } from '@hooks/useTranslation';
 import { useRegisterFormState } from '@hooks/useRegisterFormState';
 import { EmailInput } from '@components/micro/Inputs/EmailInput';
 import { PasswordInput } from '@components/micro/Inputs/PasswordInput';

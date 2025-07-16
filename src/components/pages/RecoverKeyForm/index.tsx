@@ -8,7 +8,7 @@ import styles from './styles.module.scss';
 import FormLayout from '@components/macro/layout/FormLayout';
 import { useCustomRouter } from '@contexts/useCustomRouter';
 import { showToast, ToastType } from '@utils/toastService';
-import { useTranslation } from '@hooks/useLocalization';
+import { useTranslation } from '@hooks/useTranslation';
 
 export default function RecoverKeyForm() {
   const { t } = useTranslation('recoverKey');

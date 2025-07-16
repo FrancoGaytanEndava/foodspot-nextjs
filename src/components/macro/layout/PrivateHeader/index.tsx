@@ -7,7 +7,7 @@ import { getUserById } from '@services/userService';
 import { getImage } from '@services/purchaseReceipts';
 import { IPublicUser } from '@models/user';
 import styles from './privateHeader.module.scss';
-import { useTranslation } from '@hooks/useLocalization';
+import { useTranslation } from '@hooks/useTranslation';
 
 export default function PrivateHeader() {
   const router = useRouter();

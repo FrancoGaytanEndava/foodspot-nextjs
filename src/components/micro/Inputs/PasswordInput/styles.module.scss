@@ -1,6 +1,7 @@
 @use '/src/styles/variables' as variables;
 
 .loginLabel {
+  align-self: flex-start;
   color: var(--backgroundNeutralLighter);
   font-family: var(--secondaryFont);
   margin-bottom: 10px;

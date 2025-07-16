@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import type { LinkProps } from 'next/link';
 import { PropsWithChildren } from 'react';
-import { useTranslation } from '@hooks/useLocalization';
+import { useTranslation } from '@hooks/useTranslation';
 
 interface LinkCustomProps extends LinkProps {
   className?: string;

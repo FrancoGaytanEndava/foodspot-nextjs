@@ -5,7 +5,7 @@ import { localStorageKeys } from '.././utils/localStorageKeys';
 import { LoginResponse } from '../models/user';
 import { _login } from '../services';
 import { ToastType, showToast } from '@utils/toastService';
-import { useTranslation } from '@hooks/useLocalization';
+import { useTranslation } from '@hooks/useTranslation';
 
 interface IAuthContext {
   user: LoginResponse | null;

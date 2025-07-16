@@ -1,8 +1,9 @@
 import styles from './styles.module.scss';
 
 interface EmailInputProps {
-  value: string;
-  onChange: (value: string) => void;
+  name?: string;
+  value?: string;
+  onChange?: (value: string) => void;
   label: string;
   placeholder: string;
   className?: string;
@@ -17,11 +18,12 @@ export function EmailInput(props: EmailInputProps) {
       </label>
       <input
         id="email"
+        name={props.name}
         className={`${styles.loginInput}  ${props.darkInput ? styles.darkInput : ''} ${props.className ?? ''}`}
         placeholder={props.placeholder}
         type="email"
         value={props.value}
-        onChange={e => props.onChange(e.target.value)}
+        onChange={e => props.onChange?.(e.target.value)}
         aria-label="Email"
       />
     </>

@@ -7,7 +7,7 @@ import styles from './styles.module.scss';
 import { getUserById } from '@services/userService';
 import { IPublicUser } from '@models/user';
 import { getImage } from '@services/purchaseReceipts';
-import { useTranslation } from '@hooks/useLocalization';
+import { useTranslation } from '@hooks/useTranslation';
 
 interface PrivateFormLayoutProps {
   children: React.ReactNode;

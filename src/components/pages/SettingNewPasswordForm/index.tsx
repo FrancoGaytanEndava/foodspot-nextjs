@@ -7,7 +7,7 @@ import TextInput from '@components/micro/Inputs/TextInput';
 import Button from '@components/micro/Button';
 import styles from './styles.module.scss';
 import { useSettingNewPasswordState } from '@hooks/useSettingNewPasswordState';
-import { useTranslation } from '@hooks/useLocalization';
+import { useTranslation } from '@hooks/useTranslation';
 
 export default function SettingNewPasswordForm() {
   const { t, lang } = useTranslation('settingNewPassword');
