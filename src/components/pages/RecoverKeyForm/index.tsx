@@ -6,7 +6,7 @@ import { EmailInput } from '@components/micro/Inputs/EmailInput';
 import Button from '@components/micro/Button';
 import styles from './styles.module.scss';
 import FormLayout from '@components/macro/layout/FormLayout';
-import { useCustomRouter } from '@contexts/useCustomRouter';
+import { useCustomRouter } from '@hooks/useCustomRouter';
 import { showToast, ToastType } from '@utils/toastService';
 import { useTranslation } from '@hooks/useTranslation';
 
