@@ -1,24 +1,46 @@
-'use client';
 import FormLayout from '@components/macro/layout/FormLayout';
-import { loginAction } from 'app/[lang]/login/actions';
-import LoginFields from './LoginFields';
-import { useFormState } from 'react-dom';
+import Button from '@components/micro/Button';
+import { EmailInput } from '@components/micro/Inputs/EmailInput';
+import { PasswordInput } from '@components/micro/Inputs/PasswordInput';
 import styles from './styles.module.scss';
+import LinkCustom from '@components/micro/LinkCustom';
+import { handleLogin } from 'app/[lang]/login/actions';
+import ToastQueryTrigger from '@components/micro/ToastQueryTrigger';
+import { ToastType } from '@utils/toastService';
 
 interface LoginFormProps {
-  t: Record<string, any>;
+  t: Record<string, string>;
+  lang: string;
 }
 
 export default function LoginForm(props: LoginFormProps) {
-  const [formState, formAction] = useFormState(loginAction, { error: undefined });
-
+  const t = props.t;
+  const lang = props.lang;
   return (
-    <form action={formAction}>
+    <>
+      <ToastQueryTrigger queryKey="error" matchValue="invalid" message={t.loginErrorMessage ?? 'Credenciales inválidas'} type={ToastType.ERROR} />
       <FormLayout>
-        <h3 className={styles.title}>{props.t.loginTitle}</h3>
-        {formState?.error && <p style={{ color: 'red', marginBottom: '1rem' }}>{formState.error}</p>}
-        <LoginFields t={props.t} />
+        <form action={handleLogin}>
+          <input type="hidden" name="lang" value={lang} />
+          <h3 className={styles.title}>{t.loginTitle}</h3>
+          <EmailInput name="email" label={t.email} placeholder={t.user} />
+          <PasswordInput name="password" label={t.password} placeholder={t.password} />
+          <Button kind="primary" size="large" type="submit">
+            {t.loginBtn}
+          </Button>{' '}
+          <div className={styles.linksContainer}>
+            <LinkCustom href="/recoverKey" className={styles.forgotPassword}>
+              {t.forgotPassword}
+            </LinkCustom>
+          </div>
+          <div className={styles.linksContainer}>
+            <LinkCustom href="/register" className={styles.register} id="register">
+              <span>{t.alreadyRegistered} </span>
+              <span className={styles.registerHighlighted}>{t.registerHere}</span>
+            </LinkCustom>
+          </div>
+        </form>
       </FormLayout>
-    </form>
+    </>
   );
 }

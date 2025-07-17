@@ -6,8 +6,9 @@ interface PageProps {
 }
 
 export default async function LoginPage(props: PageProps) {
-  const lang = props.params.lang;
+  const params = await props.params;
+  const lang = params.lang;
   const t = await getTranslationServer(lang, 'login');
 
-  return <LoginForm t={t} />;
+  return <LoginForm t={t} lang={lang} />;
 }

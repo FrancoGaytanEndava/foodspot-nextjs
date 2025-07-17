@@ -1,16 +1,15 @@
 'use client';
-import { useState, useRef, RefObject, useEffect } from 'react';
+
+import { useState, useRef, useEffect } from 'react';
 import styles from './styles.module.scss';
 import { getBrowserName } from '@utils/utilities';
 
 interface PasswordInputProps {
-  name?: string;
-  value?: string;
-  onChange?: (value: string) => void;
+  name: string;
   label: string;
   placeholder: string;
   className?: string;
-  inputRef?: RefObject<HTMLInputElement | null>;
+  defaultValue?: string;
 }
 
 export function PasswordInput(props: PasswordInputProps) {
@@ -25,20 +24,19 @@ export function PasswordInput(props: PasswordInputProps) {
 
   return (
     <>
-      <label htmlFor="password" className={styles.loginLabel}>
+      <label htmlFor={props.name} className={styles.loginLabel}>
         {props.label}
       </label>
       <section className={styles.inputPasswordSection}>
         <input
-          id="password"
-          name={props.name}
+          id={props.name}
+          name="password"
           ref={inputRef}
           className={`${styles.loginInput} ${props.className ?? ''}`}
           placeholder={props.placeholder}
           type={!canRenderEye ? 'password' : showPassword ? 'password' : 'text'}
-          value={props.value}
-          onChange={e => props.onChange?.(e.target.value)}
-          aria-label="Password"
+          defaultValue={props.defaultValue}
+          aria-label={props.label}
         />
         {canRenderEye && (
           <div

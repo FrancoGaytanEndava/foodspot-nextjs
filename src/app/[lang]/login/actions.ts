@@ -1,18 +1,26 @@
 'use server';
 
 import { cookies } from 'next/headers';
+import { loginServer } from '@services/authServerService';
+import { LoginRequest } from '@models/user';
 import { redirect } from 'next/navigation';
-import { _login } from '@services/authService';
 
-export async function loginAction(_prevState: any, formData: FormData): Promise<{ error?: string }> {
+export async function handleLogin(formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
+  const lang = formData.get('lang') as string;
+
+  console.log('este es el lang: ' + lang);
 
   try {
-    const res = await _login({ email, password });
+    const payload: LoginRequest = { email, password };
+    const res = await loginServer(payload);
     const token = res.jwt;
 
-    (cookies() as any).set('jwt', token, {
+    if (!res?.jwt) throw new Error('Token no recibido');
+
+    const cookieStore = await cookies();
+    cookieStore.set('jwt', token, {
       httpOnly: true,
       path: '/',
       sameSite: 'lax',
@@ -20,9 +28,11 @@ export async function loginAction(_prevState: any, formData: FormData): Promise<
       secure: process.env.NODE_ENV === 'production',
     });
 
-    redirect('/');
-  } catch (error) {
-    console.log(error);
-    return { error: 'Credenciales inválidas' };
+    const saved = cookieStore.get('jwt');
+    console.log('📦 JWT seteado:', saved?.value);
+    //redirect(`/${lang}`);
+  } catch (err) {
+    redirect(`/${lang}/login?error=invalid`);
+    console.log(err);
   }
 }
