@@ -1,4 +1,4 @@
-'use client';
+/* 'use client';
 
 import FormLayout from '@components/macro/layout/FormLayout';
 import { useTranslation } from '@hooks/useTranslation';
@@ -87,3 +87,4 @@ export default function RegisterForm() {
     </FormLayout>
   );
 }
+ */

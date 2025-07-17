@@ -1,4 +1,4 @@
-'use client';
+/* 'use client';
 
 import FormLayout from '@components/macro/layout/FormLayout';
 import { EmailInput } from '@components/micro/Inputs/EmailInput';
@@ -56,3 +56,4 @@ export default function SettingNewPasswordForm() {
     </FormLayout>
   );
 }
+ */
