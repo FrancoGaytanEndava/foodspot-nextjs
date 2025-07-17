@@ -27,7 +27,7 @@ export async function handleLogin(formData: FormData) {
     });
 
     const saved = cookieStore.get('jwt');
-    console.log('📦 JWT seteado:', saved?.value);
+    console.log('JWT seteado:', saved?.value);
     //redirect(`/${lang}`);
   } catch (err) {
     console.log(err);
