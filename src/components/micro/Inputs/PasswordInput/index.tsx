@@ -52,6 +52,7 @@ export function PasswordInput(props: PasswordInputProps) {
           />
         )}
         {canRenderEye && !showPassword && <div className={styles.passwordEyeCrossedLine}></div>}
+
       </section>
     </>
   );
