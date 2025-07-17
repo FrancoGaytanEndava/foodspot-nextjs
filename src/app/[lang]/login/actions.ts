@@ -10,8 +10,6 @@ export async function handleLogin(formData: FormData) {
   const password = formData.get('password') as string;
   const lang = formData.get('lang') as string;
 
-  console.log('este es el lang: ' + lang);
-
   try {
     const payload: LoginRequest = { email, password };
     const res = await loginServer(payload);
@@ -32,7 +30,7 @@ export async function handleLogin(formData: FormData) {
     console.log('📦 JWT seteado:', saved?.value);
     //redirect(`/${lang}`);
   } catch (err) {
-    redirect(`/${lang}/login?error=invalid`);
     console.log(err);
+    redirect(`/${lang}/login?error=invalid`);
   }
 }

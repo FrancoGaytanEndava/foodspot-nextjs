@@ -18,7 +18,7 @@ export default function LoginForm(props: LoginFormProps) {
   const lang = props.lang;
   return (
     <>
-      <ToastQueryTrigger queryKey="error" matchValue="invalid" message={t.loginErrorMessage ?? 'Credenciales inválidas'} type={ToastType.ERROR} />
+      <ToastQueryTrigger queryKey="error" matchValue="invalid" message={t.loginErrorMessage} type={ToastType.ERROR} />
       <FormLayout>
         <form action={handleLogin}>
           <input type="hidden" name="lang" value={lang} />
