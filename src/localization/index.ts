@@ -1,7 +1,7 @@
-import enUS from './en-US';
-import esAr from './es-AR';
+import en from './en';
+import es from './es';
 
-export type Translation = typeof enUS;
+export type Translation = typeof en;
 
 export interface Locale {
   id: string;
@@ -11,8 +11,8 @@ export interface Locale {
 }
 
 export const locales = Object.freeze<Locale[]>([
-  { id: 'en-US', label: 'English - United States', translation: enUS },
-  { id: 'es-AR', label: 'Español - Argentina', translation: esAr },
+  { id: 'en-US', label: 'English - United States', translation: en },
+  { id: 'es-AR', label: 'Español - Argentina', translation: es },
 ]);
 
 export const defaultLocale = locales.find(locale => (locale as Locale).default) ?? locales[0]; //check if this broke something

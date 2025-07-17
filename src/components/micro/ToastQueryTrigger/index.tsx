@@ -1,7 +1,8 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+
 import { showToast, ToastType } from '@utils/toastService';
 
 interface ToastQueryTriggerProps {
@@ -19,6 +20,8 @@ export default function ToastQueryTrigger(props: ToastQueryTriggerProps) {
     if (value === props.matchValue) {
       showToast(props.message, props.type);
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, props.message, props.type]);
 
   return null;

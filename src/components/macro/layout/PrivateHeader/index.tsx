@@ -62,8 +62,10 @@ export default function PrivateHeader() {
             <div className={styles.welcomeMsg}>
               {t.headerWelcome} {authContext.user.name}
               {userData?.profilePicture && image instanceof Blob ? (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img className={styles.profileBtn} src={URL.createObjectURL(image)} alt="profile" onClick={handleGoToProfile} />
               ) : (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img src="/assets/pictures/profile.png" className={styles.profileBtn} alt="placeholder" onClick={handleGoToProfile} />
               )}
               <button className={styles.spanishFlag} onClick={() => switchLanguage('es-AR')} />
