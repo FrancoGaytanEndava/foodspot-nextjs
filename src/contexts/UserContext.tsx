@@ -9,10 +9,10 @@ interface IUserContext {
 
 const UserContext = createContext<IUserContext>({} as IUserContext);
 
-export function UserProvider({ children }: { children: React.ReactNode }): React.ReactElement {
+export function UserProvider(props: { children: React.ReactNode }): React.ReactElement {
   const [users] = useState<IUser[]>([]);
 
-  return <UserContext.Provider value={{ users }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ users }}>{props.children}</UserContext.Provider>;
 }
 
 export function useUser(): IUserContext {

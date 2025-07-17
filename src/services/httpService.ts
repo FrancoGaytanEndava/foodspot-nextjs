@@ -1,3 +1,4 @@
+'use client';
 import { IUploadFileResponse } from '@models/transfer';
 import { localStorageKeys } from '@utils/localStorageKeys';
 

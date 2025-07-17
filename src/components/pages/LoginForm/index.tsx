@@ -1,49 +1,46 @@
-'use client';
-
-import { useTranslation } from '@contexts/LocalizationContext';
-import { useAuth } from '@contexts/AuthContext';
-import Button from '@components/micro/Button';
 import FormLayout from '@components/macro/layout/FormLayout';
-import styles from './styles.module.scss';
-import Spinner from '@components/micro/Spinner';
-import LinkCustom from '@components/micro/LinkCustom';
+import Button from '@components/micro/Button';
 import { EmailInput } from '@components/micro/Inputs/EmailInput';
 import { PasswordInput } from '@components/micro/Inputs/PasswordInput';
-import { useLoginFormState } from '@hooks/useLoginFormState';
+import styles from './styles.module.scss';
+import LinkCustom from '@components/micro/LinkCustom';
+import { handleLogin } from 'app/[lang]/login/actions';
+import ToastQueryTrigger from '@components/micro/ToastQueryTrigger';
+import { ToastType } from '@utils/toastService';
 
-export default function LoginForm() {
-  const lang = useTranslation('login');
-  const { login, isLoading } = useAuth();
-  const { credentials, setEmail, setPassword } = useLoginFormState();
+interface LoginFormProps {
+  t: Record<string, string>;
+  lang: string;
+}
 
-  const handleLogin = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    await login(credentials.email, credentials.password);
-  };
-
+export default function LoginForm(props: LoginFormProps) {
+  const t = props.t;
+  const lang = props.lang;
   return (
-    <FormLayout>
-      <h3 className={styles.title}> {lang.loginTitle}</h3>
-
-      <EmailInput value={credentials.email} onChange={setEmail} label={lang.email} placeholder={lang.user} />
-      <PasswordInput value={credentials.password} onChange={setPassword} label={lang.password} placeholder={lang.password} />
-
-      {isLoading ? (
-        <Spinner size={26} strokeWidth={4} />
-      ) : (
-        <Button kind="primary" size="large" type="submit" onClick={handleLogin}>
-          {lang.loginBtn}
-        </Button>
-      )}
-
-      <LinkCustom href="/recoverkey" className={styles.forgotPassword}>
-        {lang.forgotPassword}
-      </LinkCustom>
-
-      <LinkCustom href="/register" className={styles.register} id="register">
-        <span>{lang.alreadyRegistered} </span>
-        <span className={styles.registerHighlighted}>{lang.registerHere}</span>
-      </LinkCustom>
-    </FormLayout>
+    <>
+      <ToastQueryTrigger queryKey="error" matchValue="invalid" message={t.loginErrorMessage} type={ToastType.ERROR} />
+      <FormLayout>
+        <form action={handleLogin}>
+          <input type="hidden" name="lang" value={lang} />
+          <h3 className={styles.title}>{t.loginTitle}</h3>
+          <EmailInput name="email" label={t.email} placeholder={t.user} />
+          <PasswordInput name="password" label={t.password} placeholder={t.password} />
+          <Button kind="primary" size="large" type="submit">
+            {t.loginBtn}
+          </Button>{' '}
+          <div className={styles.linksContainer}>
+            <LinkCustom href="/recoverKey" className={styles.forgotPassword}>
+              {t.forgotPassword}
+            </LinkCustom>
+          </div>
+          <div className={styles.linksContainer}>
+            <LinkCustom href="/register" className={styles.register} id="register">
+              <span>{t.alreadyRegistered} </span>
+              <span className={styles.registerHighlighted}>{t.registerHere}</span>
+            </LinkCustom>
+          </div>
+        </form>
+      </FormLayout>
+    </>
   );
 }

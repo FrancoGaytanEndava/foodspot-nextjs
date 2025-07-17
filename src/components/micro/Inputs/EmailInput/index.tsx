@@ -1,27 +1,28 @@
 import styles from './styles.module.scss';
 
 interface EmailInputProps {
-  value: string;
-  onChange: (value: string) => void;
+  name: string;
   label: string;
   placeholder: string;
   className?: string;
+  darkInput?: boolean;
+  defaultValue?: string;
 }
 
 export function EmailInput(props: EmailInputProps) {
   return (
     <>
-      <label htmlFor="email" className={styles.loginLabel}>
+      <label htmlFor={props.name} className={`${styles.loginLabel} ${props.darkInput ? styles.darkLabel : ''}`}>
         {props.label}
       </label>
       <input
-        id="email"
-        className={`${styles.loginInput} ${props.className ?? ''}`}
+        id={props.name}
+        name="email"
+        className={`${styles.loginInput} ${props.darkInput ? styles.darkInput : ''} ${props.className ?? ''}`}
         placeholder={props.placeholder}
-        type="text"
-        value={props.value}
-        onChange={e => props.onChange(e.target.value)}
-        aria-label="Email"
+        type="email"
+        defaultValue={props.defaultValue}
+        aria-label={props.label}
       />
     </>
   );

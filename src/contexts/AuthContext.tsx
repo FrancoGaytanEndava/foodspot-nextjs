@@ -4,9 +4,8 @@ import { createContext, useContext, useState, SetStateAction, useEffect, JSX } f
 import { localStorageKeys } from '.././utils/localStorageKeys';
 import { LoginResponse } from '../models/user';
 import { _login } from '../services';
-import { useAlert } from './AlertContext';
-import { AlertTypes } from '../components/micro/AlertPopup';
-import { useTranslation } from './LocalizationContext';
+import { ToastType, showToast } from '@utils/toastService';
+import { useTranslation } from '@hooks/useTranslation';
 
 interface IAuthContext {
   user: LoginResponse | null;
@@ -17,23 +16,19 @@ interface IAuthContext {
   isRedirecting: string | null;
   setRedirection: (currentDirection: string | null) => void;
   setUser: React.Dispatch<SetStateAction<LoginResponse | null>>;
-  logout: () => void;
+  logout: (langId: string) => void;
   login: (email: string, password: string) => void;
 }
 
 const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
-export function AuthProvider({ children }: { children: React.ReactNode }): JSX.Element {
+export function AuthProvider(props: { children: React.ReactNode }): JSX.Element {
   const router = useRouter();
   const [user, setUser] = useState<LoginResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState<string | null>(null);
-  const { setAlert } = useAlert();
-  const lang = useTranslation('login');
+  const { t } = useTranslation('login');
 
-  /**
-   * Logs in user
-   */
   function login(email: string, password: string): void {
     setIsLoading(true);
 
@@ -42,7 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }): JSX.E
         localStorage.setItem(localStorageKeys.user, JSON.stringify(res));
         localStorage.setItem(localStorageKeys.token, JSON.stringify(res.jwt));
         setUser(res);
-        setAlert(`${lang.welcomeMessage} ${res.name}!`, AlertTypes.SUCCESS);
+        showToast(`${t.welcomeMessage} ${res.name}!`, ToastType.SUCCESS);
 
         if (isRedirecting) {
           router.push(`${isRedirecting}`);
@@ -54,28 +49,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }): JSX.E
       })
       .catch(error => {
         console.error(error);
-        setAlert(lang.loginErrorMessage, AlertTypes.ERROR);
+        showToast(t.loginErrorMessage, ToastType.ERROR);
       })
       .finally(() => setIsLoading(false));
   }
 
-  /**
-   * Logs out current user
-   */
-  function logout() {
+  function logout(langId: string) {
     localStorage.removeItem(localStorageKeys.user);
     localStorage.removeItem(localStorageKeys.token);
     setUser(null);
-    router.push('/login');
+    router.push(`/${langId}/login`);
   }
 
   function getUserFromLocalStorage(): LoginResponse {
     return JSON.parse(localStorage.getItem(localStorageKeys.user) ?? '{}');
   }
 
-  /**
-   * Checks if user is auth
-   */
   function isAuthenticated(): boolean {
     return !!getUserFromLocalStorage();
   }
@@ -88,9 +77,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }): JSX.E
     }
   }
 
-  /**
-   * Looks for a logged user when app initialize
-   */
   useEffect(() => {
     if (!user) {
       setUser(getUserFromLocalStorage());
@@ -111,7 +97,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }): JSX.E
         logout,
         login,
       }}>
-      {children}
+      {props.children}
     </AuthContext.Provider>
   );
 }

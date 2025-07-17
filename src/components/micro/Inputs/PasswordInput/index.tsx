@@ -1,37 +1,44 @@
-import { useState, useRef } from 'react';
+'use client';
+
+import { useState, useRef, useEffect } from 'react';
 import styles from './styles.module.scss';
 import { getBrowserName } from '@utils/utilities';
 
 interface PasswordInputProps {
-  value: string;
-  onChange: (value: string) => void;
+  name: string;
   label: string;
   placeholder: string;
   className?: string;
+  defaultValue?: string;
 }
 
 export function PasswordInput(props: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(true);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const browser = getBrowserName();
+  const [canRenderEye, setCanRenderEye] = useState(false);
+
+  useEffect(() => {
+    const browser = getBrowserName();
+    setCanRenderEye(browser !== 'Edge');
+  }, []);
 
   return (
     <>
-      <label htmlFor="password" className={styles.loginLabel}>
+      <label htmlFor={props.name} className={styles.loginLabel}>
         {props.label}
       </label>
       <section className={styles.inputPasswordSection}>
         <input
-          id="password"
+          id={props.name}
+          name="password"
           ref={inputRef}
           className={`${styles.loginInput} ${props.className ?? ''}`}
           placeholder={props.placeholder}
-          type={browser === 'Edge' ? 'password' : showPassword ? 'password' : 'text'}
-          value={props.value}
-          onChange={e => props.onChange(e.target.value)}
-          aria-label="Password"
+          type={!canRenderEye ? 'password' : showPassword ? 'password' : 'text'}
+          defaultValue={props.defaultValue}
+          aria-label={props.label}
         />
-        {browser !== 'Edge' && (
+        {canRenderEye && (
           <div
             className={styles.passwordEye}
             onClick={() => {
@@ -44,7 +51,8 @@ export function PasswordInput(props: PasswordInputProps) {
             }}
           />
         )}
-        {browser !== 'Edge' && !showPassword && <div className={styles.passwordEyeCrossedLine}></div>}
+        {canRenderEye && !showPassword && <div className={styles.passwordEyeCrossedLine}></div>}
+
       </section>
     </>
   );

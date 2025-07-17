@@ -1,3 +1,4 @@
+'use client';
 import '@cyntler/react-doc-viewer/dist/index.css';
 
 export function parseMinutes(minutes: string) {
@@ -8,7 +9,12 @@ export function parseMinutes(minutes: string) {
   return newMinutes;
 }
 
-export const downloadFile = ({ file, fileName }: any): any => {
+interface DownloadFileParams {
+  file: Blob | File;
+  fileName: string;
+}
+
+export const downloadFile = ({ file, fileName }: DownloadFileParams): void => {
   const blob = new Blob([file], { type: file.type });
   const url = URL.createObjectURL(blob);
 
@@ -41,29 +47,3 @@ export function getBrowserName(): string {
       return 'other';
   }
 }
-
-/* interface PreviewFileProps {
-	file: any[];
-} */
-
-/* export function PreviewFile(file: File[]) {
-	const [activeDocument, setActiveDocument] = useState(file[0]); // Inicializa con el primer archivo
-  
-	const handleDocumentChange = (doc: any) => {
-	  setActiveDocument(doc);
-	};
-  
-	return (
-		<div>
-		<DocViewer
-		documents={file}
-		activeDocument={activeDocument}
-		onDocumentChange={handleDocumentChange}
-		pluginRenderers={DocViewerRenderers} // Asegúrate de pasar los renderizadores
-	  />
-	</div>
-	)
-	  
-  };
- 
- */

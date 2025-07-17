@@ -1,27 +1,22 @@
 @use '/src/styles/variables' as variables;
-@use '/src/styles/shared';
-@use '/src/styles/custom-properties';
 
 .loginLabel {
+  align-self: flex-start;
   color: var(--backgroundNeutralLighter);
   font-family: var(--secondaryFont);
-  align-self: flex-start;
   margin-bottom: 10px;
-
-  @media #{variables.media-query(max, lg)} {
-    font-weight: variables.font-weight(bold);
-    font-size: 16px;
-  }
 }
+
 .inputPasswordSection {
   position: relative;
+  width: 100%;
 
   .loginInput {
+    width: 100%;
     background: none;
     border: 1px solid white;
     color: var(--backgroundNeutralLighter);
     font-family: var(--secondaryFont);
-    min-width: 300px;
     min-height: 40px;
     padding-left: 15px;
     margin-bottom: 15px;
@@ -39,19 +34,19 @@
   .passwordEye {
     position: absolute;
     right: 7px;
-    top: 13px;
-    height: 18px;
+    top: 15px;
     width: 18px;
+    height: 18px;
     background-size: contain;
     background-image: url('/images/icons/icons-eye.png');
   }
 
   .passwordEyeCrossedLine {
     position: absolute;
-    background-color: rgb(255, 255, 255);
+    background-color: white;
     transform: rotate(135deg);
     right: 16px;
-    top: 9px;
+    top: 11px;
     height: 25px;
     width: 1px;
   }

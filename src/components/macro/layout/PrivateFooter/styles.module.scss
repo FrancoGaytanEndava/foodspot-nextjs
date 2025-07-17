@@ -1,0 +1,17 @@
+@use '/src/styles/variables';
+
+.footerFire {
+  width: 100%;
+  height: 40px;
+  position: relative;
+  transform: translateY(8px);
+  margin-top: 25px;
+  background-image: url('/images/icons/fireBlack.png');
+  background-size: contain;
+  z-index: 1;
+
+  @media #{variables.media-query(max, lg)} {
+    background-repeat: repeat;
+    background-size: contain;
+  }
+}
