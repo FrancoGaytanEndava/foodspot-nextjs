@@ -1,6 +1,8 @@
-/* import RegisterForm from '@components/pages/RegisterForm'; */
+import RegisterForm from '@components/pages/RegisterForm';
+import { getTranslations } from '@hooks/useTranslationServer';
 
-export default function RegisterPage() {
-  /* return <RegisterForm />; */
-  return <></>;
+export default async function RegisterPage(props: { params: { lang: string } }) {
+  const lang = (await props.params).lang;
+  const t = getTranslations(lang, 'register');
+  return <RegisterForm t={t} lang={lang} />;
 }

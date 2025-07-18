@@ -1,69 +1,78 @@
 export interface LoginRequest {
-	email: string;
-	password: string;
+  email: string;
+  password: string;
 }
 export interface LoginResponse {
-	name: string;
-	jwt: string;
-	id: string;
+  name: string;
+  jwt: string;
+  id: string;
 }
 
 export interface RegisterResponse {
-	jwt: string;
+  _id: string;
+  name: string;
+  lastName: string;
+  email: string;
+  password: string;
+  verificationCode: string | null;
+  cbu: string | null;
+  alias: string | null;
+  specialDiet: string[];
+  profilePicture: string | null;
 }
 
 export interface IUser {
-	_id: string;
-	name: string;
-	lastName: string;
-	email: string;
-	password?: string;
-	confirmPassword?: string;
-	specialDiet: string[];
-	cbu?: string;
-	alias?: string;
-	profilePicture?: string;
+  _id: string;
+  name: string;
+  lastName: string;
+  email: string;
+  password?: string;
+  confirmPassword?: string;
+  specialDiet: string[];
+  cbu?: string;
+  alias?: string;
+  profilePicture?: string;
 }
 
 export interface IPublicUser {
-	_id: string;
-	name: string;
-	lastName: string;
-	email: string;
-	specialDiet: string[];
-	cbu?: string;
-	alias?: string;
-	profilePicture?: string;
+  _id: string;
+  name: string;
+  lastName: string;
+  email: string;
+  specialDiet: string[];
+  cbu?: string;
+  alias?: string;
+  profilePicture?: string;
 }
 
 export interface RegisterRequest {
-	name: string;
-	lastName: string;
-	email: string;
-	password: string;
-	repeatedPassword?: string;
-	specialDiet: string[]; // TODO: estos strings solo pueden ser celiac, hypertensive, vegan, vegetarian
+  name: string;
+  lastName: string;
+  email: string;
+  password: string;
+  repeatedPassword?: string;
+  specialDiet: string[]; // TODO: estos strings solo pueden ser celiac, hypertensive, vegan, vegetarian
 }
 
 export interface profilePicture {
-	file?: any;
+  file?: any;
 }
 
 export interface EventUserResponse {
-	userId: string;
-	userName: string;
-	userLastName: string;
-	transferReceipt: string | null;
-	hasReceiptApproved: boolean | null;
-	hasUploaded: boolean;
-	specialDiet: [];
+  userId: string;
+  userName: string;
+  userLastName: string;
+  transferReceipt: string | null;
+  hasReceiptApproved: boolean | null;
+  hasUploaded: boolean;
+  specialDiet: [];
 }
 
 export interface EditUserResponse {
-	imageId: string;
+  imageId: string;
 }
 
 export interface IsUserDebtorResponse {
-	eventId: string;
-	reason: string;
+  eventId: string;
+  reason: string;
 }
