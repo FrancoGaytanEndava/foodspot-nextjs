@@ -12,6 +12,8 @@ export async function handleRegister(prevState: RegisterFormState, formData: For
   const lastName = formData.get('lastName');
   const specialDiet = formData.getAll('specialDiet');
 
+  /*   const lang = formData.get('lang') as string; */
+
   if (
     typeof email !== 'string' ||
     typeof password !== 'string' ||
@@ -36,8 +38,6 @@ export async function handleRegister(prevState: RegisterFormState, formData: For
     };
 
     const response = await registerServer(payload);
-    console.log(response);
-
     if (response && response._id) {
       return { success: true };
     } else {
