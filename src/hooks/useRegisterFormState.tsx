@@ -88,7 +88,7 @@ export function useRegisterFormState(t: Translation['register']) {
         lastName: credentials.lastName,
         specialDiet: resolveDiet(),
       });
-      setJWT(res.jwt);
+      setJWT(res._id);
       showToast(`${t.successMsg}!`, ToastType.SUCCESS);
       router.push('/login');
     } catch (e) {
