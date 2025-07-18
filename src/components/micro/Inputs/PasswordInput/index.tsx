@@ -30,7 +30,7 @@ export function PasswordInput(props: PasswordInputProps) {
       <section className={styles.inputPasswordSection}>
         <input
           id={props.name}
-          name="password"
+          name={props.name ?? 'password'}
           ref={inputRef}
           className={`${styles.loginInput} ${props.className ?? ''}`}
           placeholder={props.placeholder}
@@ -52,7 +52,6 @@ export function PasswordInput(props: PasswordInputProps) {
           />
         )}
         {canRenderEye && !showPassword && <div className={styles.passwordEyeCrossedLine}></div>}
-
       </section>
     </>
   );
