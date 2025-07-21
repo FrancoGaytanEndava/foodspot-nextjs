@@ -9,4 +9,5 @@ export default Object.seal({
   user: 'user@endava.com',
   welcomeMessage: 'Welcome',
   loginErrorMessage: 'The entered data does not match any user.',
+  loginErrorUnexpected: 'Unexpected error during login',
 });

@@ -1,33 +1,39 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { loginServer } from '@services/authServerService';
+import { loginServerSide } from '@services/authServerService';
 import { LoginRequest } from '@models/user';
-import { redirect } from 'next/navigation';
+import type { LoginFormState } from '@components/pages/LoginForm';
 
-export async function handleLogin(formData: FormData) {
+export async function handleLogin(_prevState: LoginFormState, formData: FormData): Promise<LoginFormState> {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
   const lang = formData.get('lang') as string;
-  let isLoginSuccess = false;
+
+  if (!email || !password || !lang) {
+    return { error: 'loginFailed' };
+  }
 
   try {
     const payload: LoginRequest = { email, password };
-    const { jwt, id, name } = await loginServer(payload);
+    const { jwt, id, name } = await loginServerSide(payload);
 
-    if (!jwt) throw new Error('Token no recibido');
+    if (!jwt) return { error: 'invalidCredentials' };
 
     const cookieStore = await cookies();
+
+    // Cookie segura solo para el server (auth)
     cookieStore.set('jwt', jwt, {
-      httpOnly: true, // just for the server (authentication)
+      httpOnly: true,
       path: '/',
       sameSite: 'lax',
       maxAge: 60 * 60 * 24,
       secure: process.env.NODE_ENV === 'production',
     });
 
+    // Cookie visible por el cliente
     cookieStore.set('user', JSON.stringify({ id, name }), {
-      httpOnly: false, // accesible for the client as well
+      httpOnly: false,
       path: '/',
       sameSite: 'lax',
       maxAge: 60 * 60 * 24,
@@ -36,14 +42,10 @@ export async function handleLogin(formData: FormData) {
 
     const saved = cookieStore.get('jwt');
     console.log('JWT seteado:', saved?.value);
-    isLoginSuccess = true;
-  } catch (err) {
-    console.log(err);
-  }
 
-  if (isLoginSuccess) {
-    redirect(`/${lang}/eventHome?success=1`); //despues hace lo mismo que hiciste en el login para el error, pero dentro de homeEvent con el ToastQueryTrigger en success
-  } else {
-    redirect(`/${lang}/login?error=invalid`);
+    return { success: true };
+  } catch (err) {
+    console.log('Login failed:', err);
+    return { error: 'loginFailed' };
   }
 }

@@ -1,6 +1,6 @@
 'use server';
 
-import { registerServer } from '@services/authServerService';
+import { registerServerSide } from '@services/authServerService';
 import { RegisterRequest } from '@models/user';
 import type { RegisterFormState } from '@components/pages/RegisterForm';
 
@@ -11,8 +11,6 @@ export async function handleRegister(prevState: RegisterFormState, formData: For
   const name = formData.get('name');
   const lastName = formData.get('lastName');
   const specialDiet = formData.getAll('specialDiet');
-
-  /*   const lang = formData.get('lang') as string; */
 
   if (
     typeof email !== 'string' ||
@@ -37,7 +35,7 @@ export async function handleRegister(prevState: RegisterFormState, formData: For
       specialDiet: specialDiet as string[],
     };
 
-    const response = await registerServer(payload);
+    const response = await registerServerSide(payload);
     if (response && response._id) {
       return { success: true };
     } else {

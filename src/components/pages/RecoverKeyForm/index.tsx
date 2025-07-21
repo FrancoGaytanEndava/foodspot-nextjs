@@ -9,6 +9,7 @@ import FormLayout from '@components/macro/layout/FormLayout';
 import { useCustomRouter } from '@hooks/useCustomRouter';
 import { showToast, ToastType } from '@utils/toastService';
 import { useTranslation } from '@hooks/useTranslation';
+import ToastQueryTrigger from '@components/micro/ToastQueryTrigger';
 
 export default function RecoverKeyForm() {
   const { t } = useTranslation('recoverKey');
@@ -29,6 +30,8 @@ export default function RecoverKeyForm() {
 
   return (
     <FormLayout>
+      <ToastQueryTrigger queryKey="success" matchValue="1" message={t.loginSuccessMessage ?? 'Sesión iniciada con éxito'} type={ToastType.SUCCESS} />{' '}
+      {/* Esto despues pasalo al home, no corresponde que este aca */}
       <div className={styles.recoverKeyContainer}>
         <h1>{t.newPassword}</h1>
 
