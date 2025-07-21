@@ -10,4 +10,5 @@ export default Object.seal({
   welcomeMessage: 'Welcome',
   loginErrorMessage: 'The entered data does not match any user.',
   loginErrorUnexpected: 'Unexpected error during login',
+  userRegistered: 'User has been registered',
 });

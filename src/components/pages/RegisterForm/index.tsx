@@ -10,16 +10,20 @@ import TextInput from '@components/micro/Inputs/TextInput';
 import styles from './styles.module.scss';
 import { showToast, ToastType } from '@utils/toastService';
 import { useTranslation } from '@hooks/useTranslation';
+import { useCustomRouter } from '@hooks/useCustomRouter';
 
-export type RegisterFormState = { success: true; error?: undefined } | { success?: false; error: 'passwordMismatch' | 'registerFailed' };
+export type RegisterFormState = { success: true; error?: undefined } | { success?: false; error: '' | 'passwordMismatch' | 'registerFailed' };
 
 export default function RegisterForm() {
-  const [formState, formAction] = useActionState<RegisterFormState, FormData>(handleRegister, { error: 'registerFailed' });
+  const { pushTo } = useCustomRouter();
+  const [formState, formAction] = useActionState<RegisterFormState, FormData>(handleRegister, { error: '' });
   const { t, lang } = useTranslation('register');
 
   useEffect(() => {
+    if (!formState) return;
     if (formState.success) {
       showToast(t.successMsg, ToastType.SUCCESS);
+      pushTo('login?success=1');
     }
 
     if (formState.error === 'registerFailed') {

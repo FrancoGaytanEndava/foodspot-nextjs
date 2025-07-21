@@ -11,6 +11,7 @@ import styles from './styles.module.scss';
 import { showToast, ToastType } from '@utils/toastService';
 import { useCustomRouter } from '@hooks/useCustomRouter';
 import { useTranslation } from '@hooks/useTranslation';
+import ToastQueryTrigger from '@components/micro/ToastQueryTrigger';
 
 export type LoginFormState = { success: true; error?: undefined } | { success?: false; error: '' | 'invalidCredentials' | 'loginFailed' };
 
@@ -39,6 +40,7 @@ export default function LoginForm() {
 
   return (
     <FormLayout>
+      <ToastQueryTrigger queryKey="success" matchValue="1" message={t.userRegistered} type={ToastType.SUCCESS} />{' '}
       <form action={formAction}>
         <input type="hidden" name="lang" value={lang} />
         <h3 className={styles.title}>{t.loginTitle}</h3>
