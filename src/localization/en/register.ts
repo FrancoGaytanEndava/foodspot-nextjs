@@ -5,6 +5,7 @@ export default Object.seal({
   password: 'Password',
   confirmPassword: 'Confirm Password',
   emailPlaceholder: 'user@endava.com',
+  passwordPlaceholder: 'Password',
   emailDescription: 'Please, use your Endava email address',
   passwordDescription: 'At least 8 characters including: 1 lowercase, 1 uppercase, 1 special character and 1 number',
   specialDiet: 'Special Diet',

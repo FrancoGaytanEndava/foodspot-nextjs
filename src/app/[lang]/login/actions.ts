@@ -1,25 +1,39 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { loginServer } from '@services/authServerService';
+import { loginServerSide } from '@services/authServerService';
 import { LoginRequest } from '@models/user';
-import { redirect } from 'next/navigation';
+import type { LoginFormState } from '@components/pages/LoginForm';
 
-export async function handleLogin(formData: FormData) {
+export async function handleLogin(_prevState: LoginFormState, formData: FormData): Promise<LoginFormState> {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
   const lang = formData.get('lang') as string;
 
+  if (!email || !password || !lang) {
+    return { error: 'loginFailed' };
+  }
+
   try {
     const payload: LoginRequest = { email, password };
-    const res = await loginServer(payload);
-    const token = res.jwt;
+    const { jwt, id, name } = await loginServerSide(payload);
 
-    if (!res?.jwt) throw new Error('Token no recibido');
+    if (!jwt) return { error: 'invalidCredentials' };
 
     const cookieStore = await cookies();
-    cookieStore.set('jwt', token, {
+
+    // Cookie segura solo para el server (auth)
+    cookieStore.set('jwt', jwt, {
       httpOnly: true,
+      path: '/',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24,
+      secure: process.env.NODE_ENV === 'production',
+    });
+
+    // Cookie visible por el cliente
+    cookieStore.set('user', JSON.stringify({ id, name }), {
+      httpOnly: false,
       path: '/',
       sameSite: 'lax',
       maxAge: 60 * 60 * 24,
@@ -28,9 +42,10 @@ export async function handleLogin(formData: FormData) {
 
     const saved = cookieStore.get('jwt');
     console.log('JWT seteado:', saved?.value);
-    //redirect(`/${lang}`);
+
+    return { success: true };
   } catch (err) {
-    console.log(err);
-    redirect(`/${lang}/login?error=invalid`);
+    console.log('Login failed:', err);
+    return { error: 'loginFailed' };
   }
 }

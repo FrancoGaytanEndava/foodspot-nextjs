@@ -8,5 +8,7 @@ export default Object.seal({
   registerHere: 'Registrate acá',
   user: 'usuario@endava.com',
   welcomeMessage: '¡Bienvenido!',
+  userRegistered: 'Usuario registrado con exito',
   loginErrorMessage: 'Los datos ingresados no coinciden con ningún usuario.',
+  loginErrorUnexpected: 'Error inesperado al iniciar sesión',
 });

@@ -1,90 +1,88 @@
-/* 'use client';
+'use client';
 
+import { useActionState, useEffect } from 'react';
+import { handleRegister } from 'app/[lang]/register/actions';
 import FormLayout from '@components/macro/layout/FormLayout';
-import { useTranslation } from '@hooks/useTranslation';
-import { useRegisterFormState } from '@hooks/useRegisterFormState';
+import Button from '@components/micro/Button';
 import { EmailInput } from '@components/micro/Inputs/EmailInput';
 import { PasswordInput } from '@components/micro/Inputs/PasswordInput';
-import Button from '@components/micro/Button';
-import styles from './styles.module.scss';
 import TextInput from '@components/micro/Inputs/TextInput';
-import SpecialDietCheckboxGroup from './SpecialDietCheckboxGroup';
-import { Translation } from '@localization/index';
+import styles from './styles.module.scss';
+import { showToast, ToastType } from '@utils/toastService';
+import { useTranslation } from '@hooks/useTranslation';
+import { useCustomRouter } from '@hooks/useCustomRouter';
+
+export type RegisterFormState = { success: true; error?: undefined } | { success?: false; error: '' | 'passwordMismatch' | 'registerFailed' };
 
 export default function RegisterForm() {
-  const { t } = useTranslation<Translation['register']>('register');
+  const { pushTo } = useCustomRouter();
+  const [formState, formAction] = useActionState<RegisterFormState, FormData>(handleRegister, { error: '' });
+  const { t, lang } = useTranslation('register');
 
-  const { credentials, updateField, dietOptions, updateDietOption, passwordRef, confirmPasswordRef, handleSubmit } = useRegisterFormState(t);
+  useEffect(() => {
+    if (!formState) return;
+    if (formState.success) {
+      showToast(t.successMsg, ToastType.SUCCESS);
+      pushTo('login?success=1');
+    }
+
+    if (formState.error === 'registerFailed') {
+      showToast(t.failureMsg, ToastType.ERROR);
+    }
+
+    if (formState.error === 'passwordMismatch') {
+      showToast(t.passwordArentMatching, ToastType.WARNING);
+    }
+  }, [formState]);
 
   return (
-    <FormLayout onSubmit={handleSubmit}>
-      <h3 className={styles.title}>{t.registerTitle}</h3>
+    <FormLayout>
+      <form action={formAction}>
+        <input type="hidden" name="lang" value={lang} />
 
-      <div className={styles.inputSection}>
-        <section className={styles.firstColumn}>
-          <TextInput
-            label={t.name}
-            placeholder={t.name}
-            value={credentials.name}
-            onChange={value => updateField('name', value)}
-            className={styles.registerInput}
-          />
-          <TextInput
-            label={t.lastName}
-            placeholder={t.lastName}
-            value={credentials.lastName}
-            onChange={value => updateField('lastName', value)}
-            className={styles.registerInput}
-          />
-          <EmailInput
-            label={t.email}
-            placeholder={t.emailPlaceholder}
-            value={credentials.email}
-            onChange={value => updateField('email', value)}
-            className={styles.registerInput}
-          />
-        </section>
+        <h3 className={styles.title}>{t.registerTitle}</h3>
 
-        <section className={styles.secondColumn}>
-          <PasswordInput
-            label={t.password}
-            placeholder={t.password}
-            value={credentials.password}
-            onChange={value => updateField('password', value)}
-            inputRef={passwordRef}
-            className={styles.registerInput}
-          />
+        <div className={styles.inputSection}>
+          <div className={styles.firstColumn}>
+            <TextInput name="name" label={t.name} placeholder={t.name} />
+            <TextInput name="lastName" label={t.lastName} placeholder={t.lastName} />
+            <EmailInput name="email" label={t.email} placeholder={t.emailPlaceholder} />
+          </div>
 
-          <PasswordInput
-            label={t.confirmPassword}
-            placeholder={t.password}
-            value={credentials.repeatedPassword as string}
-            onChange={value => updateField('repeatedPassword', value)}
-            inputRef={confirmPasswordRef}
-            className={styles.registerInput}
-          />
+          <div className={styles.secondColumn}>
+            <PasswordInput name="password" label={t.password} placeholder={t.passwordPlaceholder} />
+            <span className={styles.inputDescription}>{t.passwordDescription}</span>
 
-          <SpecialDietCheckboxGroup
-            values={dietOptions}
-            labels={{
-              isVegan: t.specialDietOptions?.vegan,
-              isVegetarian: t.specialDietOptions?.vegetarian,
-              isHypertensive: t.specialDietOptions?.hypertensive,
-              isCeliac: t.specialDietOptions?.celiac,
-            }}
-            title={t.specialDiet}
-            description={t.specialDietOptional}
-            onChange={(params: { key: keyof typeof dietOptions; checked: boolean }) => updateDietOption(params.key, params.checked)}
-          />
-        </section>
-      </div>
+            <PasswordInput name="repeatedPassword" label={t.confirmPassword} placeholder={t.passwordPlaceholder} />
 
-      <section className={styles.buttonContainer}>
-        <Button type="submit" kind="primary" size="large" id="registerBtn">
-          {t.registerBtn}
-        </Button>
-      </section>
+            <div>
+              <div className={styles.specialDietTitle}>
+                {t.specialDiet} <span className={styles.inputDescription}>{t.specialDietOptional}</span>
+              </div>
+
+              <div className={styles.checkboxGroup}>
+                <label>
+                  <input type="checkbox" name="specialDiet" value="vegan" /> {t.specialDietOptions.vegan}
+                </label>
+                <label>
+                  <input type="checkbox" name="specialDiet" value="vegetarian" /> {t.specialDietOptions.vegetarian}
+                </label>
+                <label>
+                  <input type="checkbox" name="specialDiet" value="hypertensive" /> {t.specialDietOptions.hypertensive}
+                </label>
+                <label>
+                  <input type="checkbox" name="specialDiet" value="celiac" /> {t.specialDietOptions.celiac}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className={styles.buttonWrapper}>
+          <Button kind="primary" size="large" type="submit">
+            {t.registerBtn}
+          </Button>
+        </div>
+      </form>
     </FormLayout>
   );
 }
- */
