@@ -54,12 +54,13 @@
         display: flex;
 
         .logoutBtn {
-          margin-top: 10px;
-          min-width: 100px;
-          background-color: grey;
-          color: white;
+          margin-top: 13px;
+          background-image: url('/images/icons/icons-logout-white.png');
+          height: 35px;
+          width: 35px;
+          background-size: contain;
+          background-repeat: no-repeat;
           cursor: pointer;
-          height: 40px;
 
           &:hover {
             background-color: rgb(94, 93, 93);

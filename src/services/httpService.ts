@@ -1,18 +1,19 @@
 'use client';
 import { IUploadFileResponse } from '@models/transfer';
-import { localStorageKeys } from '@utils/localStorageKeys';
 
 const baseURL = process.env.NEXT_PUBLIC_API_ENDPOINT;
 
 function getToken(): string | null {
-  if (typeof window !== 'undefined') {
-    return JSON.parse(localStorage.getItem(localStorageKeys.token) ?? 'null');
-  }
-  return null;
+  if (typeof document === 'undefined') return null;
+
+  const cookie = document.cookie.split('; ').find(row => row.startsWith('jwt='));
+
+  return cookie?.split('=')[1] ?? null;
 }
 
 function getAuthHeaders(): HeadersInit {
   const token = getToken();
+  console.log(token);
   return {
     'Content-Type': 'application/json',
     Authorization: token ?? '',

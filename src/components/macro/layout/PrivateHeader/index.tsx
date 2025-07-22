@@ -1,26 +1,35 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useAuth } from '@contexts/AuthContext';
 import { getUserById } from '@services/userService';
 import { getImage } from '@services/purchaseReceipts';
 import { IPublicUser } from '@models/user';
-import styles from './privateHeader.module.scss';
+import styles from './styles.module.scss';
 import { useTranslation } from '@hooks/useTranslation';
+import { useCustomRouter } from '@hooks/useCustomRouter';
+import Image from 'next/image';
+import { getUserFromCookie, IUserFromCookie } from '@utils/localeCookies';
 
 export default function PrivateHeader() {
-  const router = useRouter();
+  const { pushTo, switchLanguage } = useCustomRouter();
   const pathname = usePathname();
   const authContext = useAuth();
   const { t, lang } = useTranslation('userProfile');
 
   const [userData, setUserData] = useState<IPublicUser | undefined>();
   const [image, setImage] = useState<File | undefined>();
+  const [user, setUser] = useState<IUserFromCookie | null>(null);
 
   useEffect(() => {
-    if (authContext.user) {
-      getUserById(authContext.user.id)
+    const cookieUser = getUserFromCookie();
+    setUser(cookieUser);
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      getUserById(user.id)
         .then(resp => {
           setUserData(resp);
           if (resp.profilePicture) {
@@ -31,7 +40,7 @@ export default function PrivateHeader() {
         })
         .catch(e => console.error('Error loading user data:', e));
     }
-  }, [authContext.user]);
+  }, [user]);
 
   const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -40,41 +49,47 @@ export default function PrivateHeader() {
 
   const handleGoToProfile = (e: React.MouseEvent) => {
     e.preventDefault();
-    router.push(`/${lang}/userProfile`);
+    pushTo(`/userProfile`);
   };
 
   const handleGoToMain = (e: React.MouseEvent) => {
     e.preventDefault();
-    router.push(`/${lang}`);
+    pushTo(`/eventHome`);
   };
-
-  function switchLanguage(langId: string) {
-    document.cookie = `locale=${langId}; path=/; max-age=${60 * 60 * 24 * 365}`;
-    const newPath = pathname.replace(/^\/[a-zA-Z-]+/, `/${langId}`);
-    router.push(newPath);
-  }
 
   return (
     <div className={styles.headerWrapper}>
       <header className={styles.privateHeader}>
         <nav className={styles.navbar}>
-          {!!authContext.user?.name && (
+          {user?.name && (
             <div className={styles.welcomeMsg}>
-              {t.headerWelcome} {authContext.user.name}
+              {t.headerWelcome} {user.name}
               {userData?.profilePicture && image instanceof Blob ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img className={styles.profileBtn} src={URL.createObjectURL(image)} alt="profile" onClick={handleGoToProfile} />
+                <Image
+                  className={styles.profileBtn}
+                  src={URL.createObjectURL(image)}
+                  alt="profile"
+                  onClick={handleGoToProfile}
+                  width={40}
+                  height={40}
+                />
               ) : (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src="/assets/pictures/profile.png" className={styles.profileBtn} alt="placeholder" onClick={handleGoToProfile} />
+                <Image
+                  src="/images/icons/profile.png"
+                  className={styles.profileBtn}
+                  alt="placeholder"
+                  width={40}
+                  height={40}
+                  onClick={handleGoToProfile}
+                />
               )}
-              <button className={styles.spanishFlag} onClick={() => switchLanguage('es-AR')} />
-              <button className={styles.englishFlag} onClick={() => switchLanguage('en-US')} />
+              <button className={styles.spanishFlag} onClick={() => switchLanguage('es-AR', pathname)} />
+              <button className={styles.englishFlag} onClick={() => switchLanguage('en-US', pathname)} />
             </div>
           )}
           <div className={styles.logoutBtnSection}>
             <button className={styles.logoutBtn} onClick={handleLogout}>
-              {!!authContext.user?.name ? t.logoutBtn : t.loginBtn}
+              {/* {!!user?.name ? t.logoutBtn : t.loginBtn} */}
             </button>
           </div>
         </nav>

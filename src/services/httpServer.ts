@@ -1,3 +1,5 @@
+import { getAuthHeaders } from '@utils/authHeaders';
+
 const baseURL = process.env.NEXT_PUBLIC_API_ENDPOINT; //TODO: cambiarles el nombre, sacales el Server cuando esten todas los servicios andando
 
 function buildUrl(path: string) {
@@ -23,11 +25,11 @@ export async function postServer<T, P = unknown>(path: string, payload?: P, sign
 }
 
 export async function getServer<T>(path: string, signal?: AbortSignal): Promise<T> {
+  const headers = await getAuthHeaders();
+
   const res = await fetch(buildUrl(path), {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
     signal,
     cache: 'no-store',
   });

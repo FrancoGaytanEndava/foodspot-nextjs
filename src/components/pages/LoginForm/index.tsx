@@ -26,7 +26,7 @@ export default function LoginForm() {
     if (!formState) return;
     if (formState.success) {
       showToast(t.welcomeMessage, ToastType.SUCCESS);
-      pushTo('recoverKey?success=1'); //cambiar para redirigir al home cuando este
+      pushTo('eventHome?success=1');
     }
 
     if (formState.error === 'invalidCredentials') {

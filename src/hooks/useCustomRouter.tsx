@@ -31,11 +31,18 @@ export function useCustomRouter() {
     router.back();
   };
 
+  const switchLanguage = (langId: string, pathname: string) => {
+    document.cookie = `locale=${langId}; path=/; max-age=${60 * 60 * 24 * 365}`;
+    const newPath = pathname.replace(/^\/[a-zA-Z-]+(?=\/|$)/, `/${langId}`);
+    router.push(newPath);
+  };
+
   return {
     pushTo,
     replaceTo,
     reloadPage,
     goBack,
     lang,
+    switchLanguage,
   };
 }
