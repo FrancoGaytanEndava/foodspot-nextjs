@@ -59,7 +59,7 @@ export function useSettingNewPasswordState(lang) {
         password: credentials.userPassword,
       });
 
-      showToast(lang.emailChangedSuccessfully, ToastType.INFO);
+      showToast(lang.passwordChangedSuccessfully, ToastType.INFO);
       setTimeout(() => router.push('/login'), 1000);
     } catch (e) {
       console.error(e);

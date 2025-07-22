@@ -40,7 +40,8 @@ export default function LoginForm() {
 
   return (
     <FormLayout>
-      <ToastQueryTrigger queryKey="success" matchValue="1" message={t.userRegistered} type={ToastType.SUCCESS} />{' '}
+      <ToastQueryTrigger queryKey="success" matchValue="1" message={t.userRegistered} type={ToastType.SUCCESS} />
+      <ToastQueryTrigger queryKey="success" matchValue="2" message={t.passwordChangedSuccessfully} type={ToastType.SUCCESS} />
       <form action={formAction}>
         <input type="hidden" name="lang" value={lang} />
         <h3 className={styles.title}>{t.loginTitle}</h3>

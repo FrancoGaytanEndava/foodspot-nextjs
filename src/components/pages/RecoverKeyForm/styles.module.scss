@@ -11,20 +11,22 @@
   align-items: center;
   max-width: 420px;
   width: 100%;
+  max-width: 350px;
+  justify-content: center;
 
   h1 {
     color: var(--backgroundNeutralLighter);
     font-size: 2rem;
     font-weight: bold;
     margin-bottom: 1rem;
-    align-self: center;
+    text-align: center;
   }
 
   .mainDesc {
     margin-bottom: 30px;
-    max-width: 350px;
     color: var(--backgroundNeutralLighter);
     font-size: 1rem;
+    text-align: center;
   }
 
   .input {

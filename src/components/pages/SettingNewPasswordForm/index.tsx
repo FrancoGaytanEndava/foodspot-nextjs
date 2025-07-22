@@ -1,59 +1,79 @@
-/* 'use client';
+'use client';
 
+import { useActionState, useEffect } from 'react';
+import { handleSetNewPassword } from 'app/[lang]/settingNewPassword/actions';
 import FormLayout from '@components/macro/layout/FormLayout';
 import { EmailInput } from '@components/micro/Inputs/EmailInput';
 import { PasswordInput } from '@components/micro/Inputs/PasswordInput';
 import TextInput from '@components/micro/Inputs/TextInput';
 import Button from '@components/micro/Button';
 import styles from './styles.module.scss';
-import { useSettingNewPasswordState } from '@hooks/useSettingNewPasswordState';
+import { showToast, ToastType } from '@utils/toastService';
+import { useCustomRouter } from '@hooks/useCustomRouter';
 import { useTranslation } from '@hooks/useTranslation';
+import ToastQueryTrigger from '@components/micro/ToastQueryTrigger';
+
+export type SettingNewPasswordFormState =
+  | { success: true; error?: undefined }
+  | {
+      success?: false;
+      error: '' | 'invalidVerificationCode' | 'missingFields' | 'invalidPassword' | 'passwordMismatch' | 'updateFailed';
+    };
 
 export default function SettingNewPasswordForm() {
-  const { t, lang } = useTranslation('settingNewPassword');
+  const { t } = useTranslation('settingNewPassword');
+  const [formState, formAction] = useActionState<SettingNewPasswordFormState, FormData>(handleSetNewPassword, { error: '' });
+  const { pushTo } = useCustomRouter();
 
-  const { credentials, updateField, handleSubmit, passwordRef, confirmPasswordRef } = useSettingNewPasswordState(lang);
+  useEffect(() => {
+    if (formState.success) {
+      showToast(t.successMsg, ToastType.SUCCESS);
+      pushTo('login');
+    }
+
+    if (formState.error === 'invalidVerificationCode') {
+      showToast(t.invalidVerificationCode, ToastType.ERROR);
+    }
+
+    if (formState.error === 'missingFields') {
+      showToast(t.missingFields, ToastType.ERROR);
+    }
+
+    if (formState.error === 'invalidPassword') {
+      showToast(t.wrongPassword, ToastType.WARNING);
+    }
+
+    if (formState.error === 'passwordMismatch') {
+      showToast(t.passwordsDontMatch, ToastType.WARNING);
+    }
+
+    if (formState.error === 'updateFailed') {
+      showToast(t.couldntUpdatePassword, ToastType.ERROR);
+    }
+  }, [formState]);
 
   return (
-    <FormLayout onSubmit={handleSubmit}>
-      <div className={styles.settingNewPasswordContainer}>
-        <h1>{t.setNewPasswordTitle}</h1>
+    <FormLayout>
+      <ToastQueryTrigger queryKey="success" matchValue="1" message={t.emailSentConfirmation} type={ToastType.SUCCESS} />{' '}
+      <form action={formAction}>
+        <div className={styles.settingNewPasswordContainer}>
+          <h1>{t.setNewPasswordTitle}</h1>
 
-        <EmailInput label={t.email} placeholder={t.email} value={credentials.userEmail} onChange={val => updateField('userEmail', val)} />
+          <EmailInput name="email" label={t.email} placeholder={t.email} className={styles.input} />
 
-        <TextInput
-          label={t.verificationCode}
-          placeholder={t.verificationCode}
-          value={credentials.userVerificationCode}
-          onChange={val => updateField('userVerificationCode', val)}
-          className={styles.input}
-        />
+          <TextInput name="verificationCode" label={t.verificationCode} placeholder={t.verificationCode} className={styles.input} />
 
-        <PasswordInput
-          label={t.password}
-          placeholder={t.password}
-          value={credentials.userPassword}
-          onChange={val => updateField('userPassword', val)}
-          inputRef={passwordRef}
-          className={styles.input}
-        />
+          <PasswordInput name="password" label={t.password} placeholder={t.password} className={styles.input} />
 
-        <p className={styles.mainDesc}>{t.passwordDescription}</p>
+          <p className={styles.mainDesc}>{t.passwordDescription}</p>
 
-        <PasswordInput
-          label={t.confirmPassword}
-          placeholder={t.confirmPassword}
-          value={credentials.userConfirmedPassword}
-          onChange={val => updateField('userConfirmedPassword', val)}
-          inputRef={confirmPasswordRef}
-          className={styles.input}
-        />
+          <PasswordInput name="confirmPassword" label={t.confirmPassword} placeholder={t.confirmPassword} className={styles.input} />
 
-        <Button type="submit" kind="primary" size="large" id="registerBtn" style={{ marginBottom: 30 }}>
-          {t.setKeyBtn}
-        </Button>
-      </div>
+          <Button type="submit" kind="primary" size="large" id="registerBtn" style={{ marginBottom: 30 }}>
+            {t.setKeyBtn}
+          </Button>
+        </div>
+      </form>
     </FormLayout>
   );
 }
- */

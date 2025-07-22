@@ -23,11 +23,15 @@ export default function RecoverKeyForm() {
   useEffect(() => {
     if (formState.success) {
       showToast(t.emailSentConfirmation, ToastType.SUCCESS);
-      pushTo('settingNewPassword');
+      pushTo('settingNewPassword?success=1');
+    }
+
+    if (formState.error === 'wrongDataEntered') {
+      showToast(t.wrongDataEntered, ToastType.ERROR);
     }
 
     if (formState.error === 'noMatchingMail') {
-      showToast(t.emailRequired, ToastType.ERROR);
+      showToast(t.noMatchingEmail, ToastType.ERROR);
     }
 
     if (formState.error === 'recoverKeyFailure') {
@@ -39,18 +43,18 @@ export default function RecoverKeyForm() {
     <FormLayout>
       <ToastQueryTrigger queryKey="success" matchValue="1" message={t.loginSuccessMessage ?? 'Sesión iniciada con éxito'} type={ToastType.SUCCESS} />{' '}
       {/* Esto despues pasalo al home, no corresponde que este aca */}
-      <div className={styles.recoverKeyContainer}>
-        <h1>{t.newPassword}</h1>
+      <form action={formAction}>
+        <div className={styles.recoverKeyContainer}>
+          <h1>{t.newPassword}</h1>
 
-        <p className={styles.mainDesc}>{t.changeDescription}</p>
+          <p className={styles.mainDesc}>{t.changeDescription}</p>
 
-        <form action={formAction}>
           <EmailInput name="email" label={t.email} placeholder={t.email} className={styles.input} />
           <Button kind="primary" size="large" type="submit" className={styles.sendBtn}>
             {t.sendEmail}
           </Button>
-        </form>
-      </div>
+        </div>
+      </form>
     </FormLayout>
   );
 }
