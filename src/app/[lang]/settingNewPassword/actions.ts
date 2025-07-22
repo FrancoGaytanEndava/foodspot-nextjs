@@ -2,11 +2,7 @@
 
 import type { SettingNewPasswordFormState } from '@components/pages/SettingNewPasswordForm';
 import { recoverPassword, verifyCode } from '@services/passwordServerService';
-
-function validatePassword(password: string): boolean {
-  const expReg = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$');
-  return expReg.test(password);
-}
+import { validatePassword } from '@utils/utilities';
 
 export async function handleSetNewPassword(_prevState: SettingNewPasswordFormState, formData: FormData): Promise<SettingNewPasswordFormState> {
   const email = formData.get('email');

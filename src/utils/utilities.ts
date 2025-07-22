@@ -1,4 +1,3 @@
-'use client';
 import '@cyntler/react-doc-viewer/dist/index.css';
 
 export function parseMinutes(minutes: string) {
@@ -28,22 +27,7 @@ export const downloadFile = ({ file, fileName }: DownloadFileParams): void => {
   document.body.removeChild(link);
 };
 
-export function getBrowserName(): string {
-  if (typeof window === 'undefined') return 'unknown';
-
-  const agent = window.navigator.userAgent.toLowerCase();
-
-  switch (true) {
-    case agent.includes('edge'):
-    case agent.includes('edg/'):
-      return 'Edge';
-    case agent.includes('trident'):
-      return 'MS IE';
-    case agent.includes('firefox'):
-      return 'Mozilla Firefox';
-    case agent.includes('safari'):
-      return 'Safari';
-    default:
-      return 'other';
-  }
+export function validatePassword(password: string): boolean {
+  const expReg = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$');
+  return expReg.test(password);
 }
