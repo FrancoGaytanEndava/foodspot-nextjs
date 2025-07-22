@@ -47,8 +47,3 @@ export function getBrowserName(): string {
       return 'other';
   }
 }
-
-export function validatePassword(password: string): boolean {
-  const expReg = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$');
-  return expReg.test(password);
-}
