@@ -1,6 +1,5 @@
-/* import SettingNewPasswordForm from '@components/pages/SettingNewPasswordForm'; */
+import SettingNewPasswordForm from '@components/pages/SettingNewPasswordForm';
 
 export default function SettingNewPasswordPage() {
-  /* return <SettingNewPasswordForm />; */
-  return <></>;
+  return <SettingNewPasswordForm />;
 }

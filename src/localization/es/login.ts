@@ -11,4 +11,5 @@ export default Object.seal({
   userRegistered: 'Usuario registrado con exito',
   loginErrorMessage: 'Los datos ingresados no coinciden con ningún usuario.',
   loginErrorUnexpected: 'Error inesperado al iniciar sesión',
+  passwordChangedSuccessfully: 'Contraseña modificada correctamente',
 });

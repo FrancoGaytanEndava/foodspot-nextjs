@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import styles from './styles.module.scss';
-import { getBrowserName } from '@utils/utilities';
+import { getBrowserName } from '@utils/clientUtilities';
 
 interface PasswordInputProps {
   name: string;

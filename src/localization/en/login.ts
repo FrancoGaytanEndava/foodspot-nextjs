@@ -8,6 +8,7 @@ export default Object.seal({
   registerHere: 'Register here',
   user: 'user@endava.com',
   welcomeMessage: 'Welcome',
+  passwordChangedSuccessfully: 'Password changed successfully',
   loginErrorMessage: 'The entered data does not match any user.',
   loginErrorUnexpected: 'Unexpected error during login',
   userRegistered: 'User has been registered',
