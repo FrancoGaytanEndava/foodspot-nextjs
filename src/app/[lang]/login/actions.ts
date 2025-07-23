@@ -22,9 +22,9 @@ export async function handleLogin(_prevState: LoginFormState, formData: FormData
 
     const cookieStore = await cookies();
 
-    // Cookie segura solo para el server (auth)
+    // Cookie visible por el cliente
     cookieStore.set('jwt', jwt, {
-      httpOnly: true,
+      httpOnly: false, //lo cambie porque necesito el token en todos los endpoints x tema de autorizacion del backend
       path: '/',
       sameSite: 'lax',
       maxAge: 60 * 60 * 24,

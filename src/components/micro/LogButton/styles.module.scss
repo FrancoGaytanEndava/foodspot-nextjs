@@ -1,0 +1,38 @@
+@use '/src/styles/variables';
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+.logBtnSection {
+  display: flex;
+
+  .logoutBtn {
+    margin-top: 13px;
+    background-image: url('/images/icons/icons-logout-white.png');
+    height: 35px;
+    width: 35px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    cursor: pointer;
+  }
+  .loginBtn {
+    align-self: center;
+    background-image: url('/images/icons/icons-login-white.png');
+    height: 28px;
+    width: 28px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    cursor: pointer;
+  }
+  .loginLogoutDesc {
+    color: var(--backgroundNeutralLighter);
+    font-weight: bold;
+    font-size: 16px;
+    margin-left: 5px;
+    align-self: center;
+    cursor: pointer;
+  }
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.04);
+  }
+}
