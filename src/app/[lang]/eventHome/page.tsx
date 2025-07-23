@@ -7,6 +7,7 @@ export default async function EventHomePage() {
     <>
       <PrivateHeader />
       <EventHome />
+      {/* next */}
       <PrivateFooter />
     </>
   );
