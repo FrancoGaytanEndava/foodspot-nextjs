@@ -1,3 +1,5 @@
+'use client';
+
 export function getBrowserName(): string {
   if (typeof window === 'undefined') return 'unknown';
 
@@ -16,4 +18,12 @@ export function getBrowserName(): string {
     default:
       return 'other';
   }
+}
+
+/**
+ * this function is used to clear the cookies related to only if they are httpOnly=false
+ */
+export function logoutClient() {
+  document.cookie = 'jwt=; Max-Age=0; path=/';
+  document.cookie = 'user=; Max-Age=0; path=/';
 }

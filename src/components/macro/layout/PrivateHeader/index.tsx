@@ -2,22 +2,20 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { useAuth } from '@contexts/AuthContext';
 import { getUserById } from '@services/userService';
 import { getImage } from '@services/purchaseReceipts';
 import { IPublicUser } from '@models/user';
 import styles from './styles.module.scss';
 import { useTranslation } from '@hooks/useTranslation';
 import { useCustomRouter } from '@hooks/useCustomRouter';
-import Image from 'next/image';
 import { getUserFromCookie, IUserFromCookie } from '@utils/localeCookies';
+import LogButton from '@components/micro/LogButton';
+import ProfileButton from '@components/micro/ProfileButton';
 
 export default function PrivateHeader() {
   const { pushTo, switchLanguage } = useCustomRouter();
   const pathname = usePathname();
-  const authContext = useAuth();
-  const { t, lang } = useTranslation('userProfile');
-
+  const { t } = useTranslation('userProfile');
   const [userData, setUserData] = useState<IPublicUser | undefined>();
   const [image, setImage] = useState<File | undefined>();
   const [user, setUser] = useState<IUserFromCookie | null>(null);
@@ -42,16 +40,6 @@ export default function PrivateHeader() {
     }
   }, [user]);
 
-  const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    authContext.logout(lang);
-  };
-
-  const handleGoToProfile = (e: React.MouseEvent) => {
-    e.preventDefault();
-    pushTo(`/userProfile`);
-  };
-
   const handleGoToMain = (e: React.MouseEvent) => {
     e.preventDefault();
     pushTo(`/eventHome`);
@@ -64,38 +52,16 @@ export default function PrivateHeader() {
           {user?.name && (
             <div className={styles.welcomeMsg}>
               {t.headerWelcome} {user.name}
-              {userData?.profilePicture && image instanceof Blob ? (
-                <Image
-                  className={styles.profileBtn}
-                  src={URL.createObjectURL(image)}
-                  alt="profile"
-                  onClick={handleGoToProfile}
-                  width={40}
-                  height={40}
-                />
-              ) : (
-                <Image
-                  src="/images/icons/profile.png"
-                  className={styles.profileBtn}
-                  alt="placeholder"
-                  width={40}
-                  height={40}
-                  onClick={handleGoToProfile}
-                />
-              )}
+              {userData?.profilePicture && <ProfileButton image={image} />}
               <button className={styles.spanishFlag} onClick={() => switchLanguage('es-AR', pathname)} />
               <button className={styles.englishFlag} onClick={() => switchLanguage('en-US', pathname)} />
             </div>
           )}
-          <div className={styles.logoutBtnSection}>
-            <button className={styles.logoutBtn} onClick={handleLogout}>
-              {/* {!!user?.name ? t.logoutBtn : t.loginBtn} */}
-            </button>
-          </div>
+          <LogButton user={user} />
         </nav>
       </header>
 
-      <section className={styles.secondHeader}>
+      <section className={styles.lowerHeader}>
         <button className={styles.logo} onClick={handleGoToMain}></button>
         <div className={styles.fire}></div>
       </section>

@@ -1,0 +1,12 @@
+@use '/src/styles/variables';
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+.profileBtn {
+  width: 30px;
+  height: 30px;
+  background-color: var(--backgroundNeutralLighter);
+  border-radius: 50%;
+  background-size: contain;
+  margin-left: 10px;
+}

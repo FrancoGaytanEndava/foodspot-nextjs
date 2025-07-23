@@ -6,7 +6,7 @@ export default function FormLayout(props: PropsWithChildren): JSX.Element {
   return (
     <div className={styles.formLayout}>
       <div className={styles.containerLayout}>
-        <LinkCustom href="/" className={styles.closeBtn} aria-label="Close" />
+        <LinkCustom href="/eventHome" className={styles.closeBtn} aria-label="Close" />
         {props.children}
       </div>
     </div>
